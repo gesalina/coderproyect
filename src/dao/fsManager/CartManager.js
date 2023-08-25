@@ -1,5 +1,7 @@
 import { cartModel } from "../models/cart.model.js";
 import { productModel } from "../models/product.model.js";
+import { userModel } from "../models/user.model.js";
+
 
 class cartManager {
   constructor() {
@@ -25,9 +27,10 @@ class cartManager {
   /**
    * Create a new cart
    */
-  createCart = async () => {
+  createCart = async (user) => {
     const generateId = await this.createtId();
     const result = await cartModel.create({ id: generateId });
+    // const addUserCart = await userModel.updateOne({id: user}, {$push : {cartId: result._id}});
     return result;
   };
   /**
