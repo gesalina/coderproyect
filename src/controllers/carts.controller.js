@@ -42,7 +42,7 @@ export const findCartByIdController = async (request, response) => {
 
 export const createCartController = async (request, response) => {
   try {
-    await cart.createCart();
+    let response = await cart.createCart();
     response.json({ message: "Carrito creado satisfactoriamente" });
   } catch (error) {
     return response.status(404).json({ status: "error", error: error });
