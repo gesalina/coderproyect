@@ -41,8 +41,9 @@ export const findCartByIdController = async (request, response) => {
 };
 
 export const createCartController = async (request, response) => {
+  const userId = request.user._id
   try {
-    let response = await cart.createCart();
+    let response = await cart.createCart(/**userId*/);
     response.json({ message: "Carrito creado satisfactoriamente" });
   } catch (error) {
     return response.status(404).json({ status: "error", error: error });
