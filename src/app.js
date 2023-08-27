@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 import MongoStore from "connect-mongo";
 import passport from "passport";
 import cookieParser from 'cookie-parser';
-import initializePassport from "./config/passport.config.js";
+import initializePassport from "../src/middlewares/auth.middleware.js";
 import run from './run.js';
 
 

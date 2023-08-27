@@ -1,6 +1,4 @@
-import cartManager from "../../src/dao/fsManager/CartManager.js";
 import Cart from "../services/cart.service.js";
-const cart = new cartManager();
 const cartService = new Cart();
 
 export const getCartsController = async (request, response) => {
