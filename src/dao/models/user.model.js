@@ -20,6 +20,9 @@ const userSchema = new mongoose.Schema({
     default: [],
   },
   role: { type: String, default: "user" },
+  isActive: { type: Boolean, default: true },
+  hasAuthenticationMethod: { type: Boolean, default: false },
+  authCode: { type: String, default: [] },
 });
 
 /**

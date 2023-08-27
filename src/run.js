@@ -1,7 +1,7 @@
-import productRouter from "../src/routers/products/product.router.js";
+import ProductRouter from "../src/routers/products/product.router.js";
 import cartRouter from "../src/routers/carts/cart.router.js";
 import viewRouter from "../src/routers/main/view.router.js";
-import chatRouter from "../src/routers/chat/chat.router.js";
+import ChatRouter from "../src/routers/chat/chat.router.js";
 import AuthRouter from "./routers/login/auth.router.js";
 import productViewsRouter from '../src/routers/products/product.views.router.js'
 import { passportCall } from "./utils.js";
@@ -18,16 +18,33 @@ const run = (io, app) => {
   /**
    * API ENDPOINTS
    */
+  
+  /**
+   * Product router
+   * This ENDPOINT is protected by roles
+   */
+  const productRouter = new ProductRouter();
+  app.use("/api/products", productRouter.getRouter());
 
-  app.use("/api/products", productRouter);
+  /**
+   * Cart router
+   */
   app.use("/api/carts", cartRouter);
-  app.use("/api/chat", chatRouter);
+
+  /**
+   * Chat router
+   * This ENDPOINT is protected by roles
+   */
+  const chatRouter = new ChatRouter();
+  app.use("/api/chat", chatRouter.getRouter());
+
   /**
    * Authentication router
    * Includes login and register form
    */
   const authRouter = new AuthRouter();
   app.use("/session", authRouter.getRouter());
+
   /**
    * Products view
    */

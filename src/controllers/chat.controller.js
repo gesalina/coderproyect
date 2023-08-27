@@ -1,14 +1,22 @@
-import chatManager from "../../src/dao/fsManager/CartManager.js";
+import Chat from "../services/chat.service.js";
 
-const chat = new chatManager();
+const chatService = new Chat();
 
 export const getMessagesController = async (request, response) => {
-  const getMessages = await chat.getMessages();
-  response.json(getMessages);
+  try {
+    const result = await chatService.getMessages();
+    return response.sendSuccess(result);
+  } catch (error) {
+    return response.sendServerError(error.message);
+  }
 };
 export const insertChatDataController = async (request, response) => {
   let data = request.body;
-  const createMessage = await chat.insertMessage(data);
-  request.app.get("socketio").emit("logs", createMessage);
-  response.json({ status: "success", messages: createMessage });
+  try {
+    const result = await chatService.insertMessage(data);
+    request.app.get("socketio").emit("logs", result);
+    return response.sendSuccess(result);
+  } catch (error) {
+    return response.sendServerError(error.message);
+  }
 };

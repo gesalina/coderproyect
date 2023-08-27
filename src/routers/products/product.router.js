@@ -1,27 +1,34 @@
-import { Router } from "express";
-import { getProductsController, getProductsByIdController, createProductController, deleteProductController, updateProductController } from "../../controllers/product.controller.js";
-const router = Router();
+import routerHandler from "../router.js";
+import {
+  getProductsController,
+  getProductsByIdController,
+  createProductController,
+  deleteProductController,
+  updateProductController,
+} from "../../controllers/product.controller.js";
 
-/**
- * This endpoint return all the products with pagination available
- */
-router.get("/", getProductsController);
+export default class ProductRouter extends routerHandler {
+  init() {
+    /**
+     * This endpoint return all the products with pagination available
+     */
+    this.get("/", ["PUBLIC"], getProductsController);
 
-/**
- * This endpoint filter a product by ID
- */
-router.get("/:pid", getProductsByIdController);
-/**
- * This endpoint create a new product
- */
-router.post("/", createProductController);
-/**
- * This endpoint delete a product by ID
- */
-router.delete("/:pid", deleteProductController);
-/**
- * This endpoint update a product
- */
-router.put("/:pid", updateProductController);
-
-export default router;
+    /**
+     * This endpoint filter a product by ID
+     */
+    this.get("/:pid", ["PUBLIC"], getProductsByIdController);
+    /**
+     * This endpoint create a new product
+     */
+    this.post("/", ["ADMIN"], createProductController);
+    /**
+     * This endpoint delete a product by ID
+     */
+    this.delete("/:pid", ["ADMIN"], deleteProductController);
+    /**
+     * This endpoint update a product
+     */
+    this.put("/:pid", ["ADMIN"], updateProductController);
+  }
+}

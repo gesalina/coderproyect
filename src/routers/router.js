@@ -74,6 +74,8 @@ export default class routerHandler {
       response.status(500).send({ status: "error", error });
     response.sendUserError = (error) =>
       response.status(400).send({ status: "error", error });
+    response.sendRequestError = (error) =>
+      response.status(404).send({ status: "error", error });
     next();
   };
   /**
@@ -81,14 +83,14 @@ export default class routerHandler {
    *  validate the users rights
    */
   handlePolicies = (policies) => (request, response, next) => {
-    const authHeaders = request.signedCookies[JWT_COOKIE_NAME];
+    const authHeaders = request.signedCookies[process.env.JWT_COOKIE_NAME];
     if (policies[0] === "PUBLIC") return next();
     if (!authHeaders)
       return response
         .status(401)
         .send({ status: "error", error: "Unauthorized" });
     const token = this.auth.extractCookie(request);
-    let user = jwt.verify(token, JWT_PRIVATE_KEY);
+    let user = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
     if (!policies.includes(user.role.toUpperCase()))
       return response
         .status(403)

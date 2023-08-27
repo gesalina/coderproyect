@@ -5,6 +5,7 @@ import local from "passport-local";
 import Auth from "../services/auth.service.js";
 import GitHubStrategy from "passport-github2";
 import dotenv from "dotenv";
+import AuthValidator from "../dao/dto/user.dto.js";
 dotenv.config();
 
 const auth = new Auth();
@@ -27,7 +28,9 @@ const initializePassport = () => {
       },
       async (request, username, password, done) => {
         try {
-          return auth.createUser(request, username, password, done);
+          let { first_name, last_name, email } = request.body;
+          const user = new AuthValidator({ first_name, last_name, email, age });
+          return auth.createUser(user, username, password, done);
         } catch (error) {
           return done(error);
         }
@@ -126,18 +129,5 @@ passport.deserializeUser(async (id, done) => {
   const user = await UserModel.findById(id);
   done(null, user);
 });
-
-export const handlePolicies = (policies) => (req, res, next) => {
-  const user = req.user.user || null;
-  console.log("handlePolicies: ", user);
-  if (policies.includes("ADMIN")) {
-    if (user.role !== "admin") {
-      return res.status(403).render("errors/base", {
-        error: "Need to be an ADMIN",
-      });
-    }
-  }
-  return next();
-};
 
 export default initializePassport;
