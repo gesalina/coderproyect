@@ -1,10 +1,12 @@
 import cartManager from "../../src/dao/fsManager/CartManager.js";
+import Cart from "../services/cart.service.js";
 const cart = new cartManager();
+const cartService = new Cart();
 
 export const getCartsController = async (request, response) => {
   try {
-    const getCarts = await cart.getCarts();
-    return response.json({ carts: getCarts });
+    const result = await cartService.getCarts();
+    return response.status(200).json(result);
   } catch (error) {
     return response.status(404).json({ status: "error", error: error });
   }
@@ -13,13 +15,13 @@ export const getCartsController = async (request, response) => {
 export const getCartProductsController = async (request, response) => {
   const cartId = request.params.cid;
   try {
-    const getProductsCarts = await cart.getCartProduct(cartId);
-    if (getProductsCarts.error) {
+    const result = await cartService.getCartProduct(cartId);
+    if (result.error) {
       return response
         .status(404)
-        .json({ status: "error", error: getProductsCarts.error });
+        .json({ status: "error", error: result.error });
     }
-    response.json({ payload: getProductsCarts });
+    response.status(200).json(result);
   } catch (error) {
     return response.status(404).json({ status: "error", error: error });
   }
@@ -28,22 +30,22 @@ export const getCartProductsController = async (request, response) => {
 export const findCartByIdController = async (request, response) => {
   const cartId = request.params.cid;
   try {
-    const getCart = await cart.findCartById(cartId);
-    if (getCart.error) {
+    const result = await cartService.findCartById(cartId);
+    if (result.error) {
       return response
         .status(404)
-        .json({ status: "error", error: getCart.error });
+        .json({ status: "error", error: result.error });
     }
-    response.json({ cart: getCart });
+    response.json(result);
   } catch (error) {
     return response.status(404).json({ status: "error", error: error });
   }
 };
 
 export const createCartController = async (request, response) => {
-  const userId = request.user._id
+  const {userId} = request.body;
   try {
-    let response = await cart.createCart(/**userId*/);
+    const result = await cartService.createCart(userId);
     response.json({ message: "Carrito creado satisfactoriamente" });
   } catch (error) {
     return response.status(404).json({ status: "error", error: error });
@@ -54,15 +56,15 @@ export const deleteProductController = async (request, response) => {
   const cartId = request.params.cid;
   const productId = request.params.pid;
   try {
-    const deleteCartProduct = await cart.deleteProduct(cartId, productId);
-    if (deleteCartProduct.error) {
+    const result = await cartService.deleteProductFromCart(cartId, productId);
+    if (result.error) {
       return response
         .status(404)
-        .json({ status: "error", error: deleteCartProduct.error });
+        .json({ status: "error", error: result.error });
     }
-    response.json({ status: "success", payload: deleteCartProduct });
-  } catch (err) {
-    response.status(404).json({ status: "error", error: err.message });
+    response.json(result);
+  } catch (error) {
+    response.status(404).json({ status: "error", error: error });
   }
 };
 
@@ -70,13 +72,13 @@ export const updateCartController = async (request, response) => {
   const cartId = request.params.cid;
   const { product, quantity } = request.body;
   try {
-    const updateCart = await cart.addProductCart(cartId, product, quantity);
-    if (updateCart.error) {
+    const result = await cartService.addProductCart(cartId, product, quantity);
+    if (result.error) {
       return response
         .status(404)
-        .json({ status: "error", error: updateCart.error });
+        .json({ status: "error", error: result.error });
     }
-    response.status(200).json({ status: "success", payload: updateCart });
+    response.status(200).json(result);
   } catch (error) {
     response.status(404).json({ status: "error", error: error });
   }
@@ -87,17 +89,13 @@ export const updateProductController = async (request, response) => {
   const productId = request.params.pid;
   const { quantity } = request.body;
   try {
-    const updateProduct = await cart.updateProductQuantity(
-      cartId,
-      productId,
-      quantity
-    );
-    if (updateProduct.error) {
+    const result = await cartService.updateProductQuantity(cartId, productId, quantity);
+    if (result.error) {
       return response
         .status(404)
-        .json({ status: "error", error: updateProduct.error });
+        .json({ status: "error", error: result.error });
     }
-    response.status(200).json({ status: "success", payload: updateProduct });
+    response.status(200).json(result);
   } catch (error) {
     response.status(404).json({ status: "error", error: error });
   }
@@ -106,13 +104,13 @@ export const updateProductController = async (request, response) => {
 export const emptyCartProductController = async (request, response) => {
   const cartId = request.params.cid;
   try {
-    const deleteProducts = await cart.deleteAllProducts(cartId);
-    if (deleteProducts.error || deleteProducts.modifiedCount == 0) {
+    const result = await cartService.deleteAllProducts(cartId);
+    if (result.error || result.modifiedCount == 0) {
       return response
         .status(404)
-        .json({ status: "error", error: deleteProducts.error });
+        .json({ status: "error", error: result.error });
     }
-    response.status(200).json({ status: "success", payload: deleteProducts });
+    response.status(200).json(result);
   } catch (error) {
     response.status(404).json({ status: "error", error: error });
   }

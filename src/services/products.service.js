@@ -1,7 +1,6 @@
-import { productsModel } from './models/product.model.js';
+import { productModel } from '../dao/models/product.model.js'
 
-export default class Products {
-  #generateId
+export default class Product {
   constructor(){
     this.error = "";
   }
@@ -32,8 +31,22 @@ export default class Products {
     if (query.availability) filter.availability = query.availibility;
 
     const products = await productModel.paginate(filter, options);
-
-    return products;
+    return {
+      status: "success",
+      payload: products.docs,
+      totalPages: products.totalPages,
+      prevPage: products.prevPage,
+      nextPage: products.nextPage,
+      page: products.page,
+      hasPrevPage: products.hasPrevPage,
+      hasNextPage: products.hasNextPage,
+      prevLink: products.hasPrevPage
+        ? `http://localhost:8080?page=${products.prevPage}&limit=${products.limit}`
+        : null,
+      nextLink: products.hasNextPage
+        ? `http://localhost:8080?page=${products.nextPage}&limit=${products.limit}`
+        : null,
+    };
     }catch(error){
       console.log(error);
       return null

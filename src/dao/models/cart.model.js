@@ -8,6 +8,10 @@ const cartSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+  },
   products: {
     type: [
       {
@@ -22,11 +26,17 @@ const cartSchema = new mongoose.Schema({
     default: [],
   },
 });
+
+mongoose.set("strictPopulate", false);
 /**
  * Middleware for populate the searchs
  */
-cartSchema.pre("find", function () {
-  this.populate("products.product");
-});
+cartSchema
+  .pre("find", function () {
+    this.populate("products.product");
+  })
+  .pre("find", function () {
+    this.populate("users");
+  });
 
 export const cartModel = mongoose.model(cartCollection, cartSchema);

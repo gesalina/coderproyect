@@ -1,26 +1,15 @@
-import ProductManager from "../../src/dao/fsManager/ProductManager.js";
+import Product from "../services/products.service.js"
 
-const productDatabase = new ProductManager();
+/**
+ * Initializate product service
+ */
+const productService = new Product();
 
 export const getProductsController = async (request, response) => {
   try {
-    const getProducts = await productDatabase.getProducts(request);
-    response.json({
-      status: "success",
-      payload: getProducts.docs,
-      totalPages: getProducts.totalPages,
-      prevPage: getProducts.prevPage,
-      nextPage: getProducts.nextPage,
-      page: getProducts.page,
-      hasPrevPage: getProducts.hasPrevPage,
-      hasNextPage: getProducts.hasNextPage,
-      prevLink: getProducts.hasPrevPage
-        ? `http://localhost:8080?page=${getProducts.prevPage}&limit=${getProducts.limit}`
-        : null,
-      nextLink: getProducts.hasNextPage
-        ? `http://localhost:8080?page=${getProducts.nextPage}&limit=${getProducts.limit}`
-        : null,
-    });
+    const result = await productService.getProducts(request);
+    console.log(result)
+    return response.json(result);
   } catch (error) {
     return response.status(404).json({ status: "error", error: error });
   }
@@ -29,13 +18,13 @@ export const getProductsController = async (request, response) => {
 export const getProductsByIdController = async(request, response) => {
     let id = request.params.pid;
     try {
-      const mongoProducts = await productDatabase.findProductById(id);
-      if (mongoProducts.error) {
+      const result = await productService.getProductsById(id);
+      if (result.error) {
         return response
           .status(404)
-          .json({ status: "error", error: `${mongoProducts.error}` });
+          .json({ status: "error", error: `${result.error}` });
       }
-      return response.json({ products: mongoProducts });
+      return response.json(result);
     } catch (error) {
       return response.status(404).json({ status: "error", error: error });
     }
@@ -44,9 +33,9 @@ export const getProductsByIdController = async(request, response) => {
 export const createProductController = async(request, response) => {
     let product = request.body;
     try {
-      const mongoProducts = await productDatabase.createProduct(product, request);
-      request.app.get("socketio").emit("updateProducts", mongoProducts);
-      response.json({ status: "success", products: mongoProducts });
+      const result = await productService.createProduct(product, request);
+      request.app.get("socketio").emit("updateProducts", result);
+      response.json(result);
     } catch (error) {
       response.status(404).json({ status: "error", error: error });
     }
@@ -55,15 +44,15 @@ export const createProductController = async(request, response) => {
 export const deleteProductController = async(request, response) => {
     let id = request.params.pid;
     try {
-      const mongoProducts = await productDatabase.deleteProduct(id);
-      if (mongoProducts.error) {
+      const result = await productService.deleteProduct(id);
+      if (result.error) {
         return response
           .status(404)
           .json({ status: "error", error: `${mongoProducts.error}` });
       }
-      response.json({ status: "success", products: mongoProducts });
-    } catch (err) {
-      response.status(404).json({ status: "error", error: `${err.message}` });
+      response.json(result);
+    } catch (error) {
+      response.status(404).json({ status: "error", error: error });
     }
 }
 
@@ -76,14 +65,14 @@ export const updateProductController = async (request, response) => {
         .json({ status: "error", error: "All the fields are needed" });
   
     try {
-      const mongoProducts = await productDatabase.updateProduct(id, data);
-      if (mongoProducts.error) {
+      const result = await productService.updateProduct(id, data);
+      if (result.error) {
         return response
           .status(404)
           .json({ status: "error", error: `${mongoProducts.error}` });
       }
-      response.json({ status: "success", products: mongoProducts });
-    } catch (err) {
-      response.status(404).json({ status: "error", error: `${err.message}` });
+      response.json(result);
+    } catch (error) {
+      response.status(404).json({ status: "error", error: error });
     }
   }
