@@ -1,4 +1,10 @@
+/**
+*  Services
+*/
 import Auth from "../services/auth.service.js";
+import Product from "../services/products.service.js";
+import Cart from "../services/cart.service.js";
+import Chat from "../services/chat.service.js";
 
 /**
 *  Repositories
@@ -11,3 +17,4 @@ import ChatRepository from './chat.repository.js';
 
 
 export const authService = new AuthRepository(new Auth());
+export const productService = new 
