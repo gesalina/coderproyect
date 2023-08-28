@@ -15,7 +15,7 @@ router.get("/", productsController);
  */
 router.get(
     "/realtimeproducts",
-    handlePolicies(['admin']),
+    handlePolicies(['PUBLIC']),
     realTimeProductsController
   );
 

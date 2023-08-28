@@ -68,12 +68,12 @@ app.use('/content', express.static('./public'));
 /**
 * Establish database connection
 */
-let serverHttp;
 
 try {
     await mongoose.connect(`mongodb+srv://${process.env.USER}:${process.env.KEY}@${process.env.MONGO_DATABASE_URL}`)
-    serverHttp = app.listen(process.env.PORT, () => console.log(`Server is running at: http://localhost:8080`));                                                      
-    const io = new Server(serverHttp);  
+    const serverHttp = app.listen(process.env.PORT, () => console.log(`Server is running at: http://localhost:8080`));                                                      
+    const io = new Server(serverHttp);
+    app.set("socketio", io);
     run(io, app)
 } catch(err) {
     console.log(err)

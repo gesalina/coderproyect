@@ -72,12 +72,12 @@ export default class Product {
   /**
    * This function generate new id in each new product inserted
    */
-  #generateId = async(request) => {
+  #generateId = async() => {
     try{
-    let getProductsId = await this.getProducts(request);
-    return getProductsId.docs.length === 0
+    let getProductsId = await productModel.find()
+    return getProductsId.length === 0
       ? 1
-      : getProductsId.docs.at(-1).id + 1;
+      : getProductsId.at(-1).id + 1;
     }catch(error){
       console.log(error);
       return null
@@ -86,10 +86,10 @@ export default class Product {
  /**
   * This function create a new product
   */
-   createProduct = async (product, request) => {
+   createProduct = async (product) => {
      try{
     const result = await productModel.create({
-      id: await this.#generateId(request),
+      id: await this.#generateId(),
       ...product,
       status: true,
     });

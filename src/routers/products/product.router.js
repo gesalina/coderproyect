@@ -21,11 +21,11 @@ export default class ProductRouter extends routerHandler {
     /**
      * This endpoint create a new product
      */
-    this.post("/", ["ADMIN"], createProductController);
+    this.post("/", ["PUBLIC"], createProductController);
     /**
      * This endpoint delete a product by ID
      */
-    this.delete("/:pid", ["ADMIN"], deleteProductController);
+    this.delete("/:pid", ["PUBLIC"], deleteProductController);
     /**
      * This endpoint update a product
      */

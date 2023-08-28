@@ -1,27 +1,8 @@
 import UserModel from "../dao/models/user.model.js";
+import { createHash, isValidPassword, generateToken, extractCookie } from "../helpers/auth.helper.js";
 
 export default class Auth {
   constructor() {}
-
-  createHash = (password) => {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-  };
-
-  isValidPassword = (user, password) => {
-    return bcrypt.compareSync(password, user.password);
-  };
-
-  generateToken = (user) => {
-    const token = jwt.sign({ user }, process.env.JWT_PRIVATE_KEY, {
-      expiresIn: "24h",
-    });
-    return token;
-  };
-  extractCookie = (request) => {
-    return request && request.cookies
-      ? request.cookies[process.env.JWT_COOKIE_NAME]
-      : null;
-  };
 
   createUser = async (request, username, password, done) => {
     const { first_name, last_name, email, age } = request.body;

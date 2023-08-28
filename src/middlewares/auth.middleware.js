@@ -5,7 +5,9 @@ import local from "passport-local";
 import Auth from "../services/auth.service.js";
 import GitHubStrategy from "passport-github2";
 import dotenv from "dotenv";
-import AuthValidator from "../dao/dto/user.dto.js";
+import AuthValidator from "../dao/dto/auth.dto.js";
+import { extractCookie } from "../helpers/auth.helper.js";
+import {authRepository } from '../repositories/repository.js'
 dotenv.config();
 
 const auth = new Auth();
@@ -28,9 +30,8 @@ const initializePassport = () => {
       },
       async (request, username, password, done) => {
         try {
-          let { first_name, last_name, email } = request.body;
-          const user = new AuthValidator({ first_name, last_name, email, age });
-          return auth.createUser(user, username, password, done);
+          let data = request.body;
+          return authRepository.createUser(data, username, password, done);
         } catch (error) {
           return done(error);
         }
@@ -85,7 +86,7 @@ passport.use(
   "jwt",
   new JWTStrategy(
     {
-      jwtFromRequest: ExtractJWT.fromExtractors([auth.extractCookie]),
+      jwtFromRequest: ExtractJWT.fromExtractors([extractCookie]),
       secretOrKey: process.env.JWT_PRIVATE_KEY,
     },
     async (jwt_payload, done) => {

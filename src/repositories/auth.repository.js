@@ -1,4 +1,4 @@
-import AuthValidator from "../dao/dto/user.dto.js";
+import AuthValidator from "../dao/dto/auth.dto.js";
 export default class AuthRepository {
   constructor(dao) {
     this.dao = dao;

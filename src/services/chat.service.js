@@ -1,4 +1,4 @@
-import { chatModel } from "../dao/models/chat.model";
+import { chatModel } from "../dao/models/chat.model.js";
 
 export default class Chat {
   constructor() {

@@ -1,14 +1,8 @@
-import Product from "../services/products.service.js";
-
-/**
- * Initializate product service
- */
-const productService = new Product();
+import { productRepository } from "../repositories/repository.js";
 
 export const getProductsController = async (request, response) => {
   try {
-    const result = await productService.getProducts(request);
-    console.log(result);
+    const result = await productRepository.getProducts(request)
     return response.sendSuccess(result);
   } catch (error) {
     return response.sendServerError(error.message);
@@ -18,7 +12,7 @@ export const getProductsController = async (request, response) => {
 export const getProductsByIdController = async (request, response) => {
   let id = request.params.pid;
   try {
-    const result = await productService.getProductsById(id);
+    const result = await productRepository.getProductsById(id);
     if (result.error) {
       return response.sendRequestError(result.error);
     }
@@ -28,11 +22,16 @@ export const getProductsByIdController = async (request, response) => {
   }
 };
 
+/**
+ * This controller create a new product
+ * validate every field
+ */
 export const createProductController = async (request, response) => {
   let product = request.body;
   try {
-    const result = await productService.createProduct(product, request);
-    request.app.get("socketio").emit("updateProducts", result);
+    const getProducts = await productRepository.getProducts(request);
+    const result = await productRepository.createProduct(product);
+    request.app.get("socketio").emit("updateProducts", getProducts.payload);
     return response.sendSuccess(result);
   } catch (error) {
     return response.sendServerError(error.message);
@@ -42,10 +41,11 @@ export const createProductController = async (request, response) => {
 export const deleteProductController = async (request, response) => {
   let id = request.params.pid;
   try {
-    const result = await productService.deleteProduct(id);
+    const result = await productRepository.deleteProduct(id);
     if (result.error) {
       return response.sendRequestError(result.error);
     }
+    
     response.sendSuccess(result);
   } catch (error) {
     return response.sendServerError(error.message);
@@ -59,7 +59,7 @@ export const updateProductController = async (request, response) => {
     return response.sendRequestError("All the fields are needed");
 
   try {
-    const result = await productService.updateProduct(id, data);
+    const result = await productRepository.updateProduct(id, data);
     if (result.error) {
       return response.sendRequestError(result.error);
     }

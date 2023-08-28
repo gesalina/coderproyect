@@ -9,7 +9,7 @@ import {
   extractCookie,
   generateToken,
   isValidPassword,
-} from "../utils.js";
+} from "../helpers/auth.helper.js";
 import GitHubStrategy from "passport-github2";
 import dotenv from "dotenv";
 dotenv.config();

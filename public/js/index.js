@@ -18,7 +18,7 @@ const deleteButton = async (data) => {
 
             const getProducts = await fetch('/api/products');
             const resultProducts = await getProducts.json();
-        socket.emit('productList', resultProducts.payload);
+        socket.emit('productList', resultProducts.payload.payload);
         }
     } catch (error) {
         console.log(error)
@@ -61,7 +61,7 @@ btn.addEventListener('click', async () => {
             } else {
 
 
-            socket.emit("productList", resultProducts.payload);
+            socket.emit("productList", resultProducts.payload.payload);
 
             alert('Producto agregado con exito!');
 
