@@ -17,4 +17,6 @@ import ChatRepository from './chat.repository.js';
 
 
 export const authService = new AuthRepository(new Auth());
-export const productService = new 
+export const productService = new ProductRepository(new Product());
+export const cartService = new CartRepository(new Cart());
+export const chatService = new ChatRepository(new Chat());
