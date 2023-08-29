@@ -1,21 +1,28 @@
-import { Router } from "express";
+import routerHandler from "../router.js";
 import {
   chatController,
   redirectLoginController,
 } from "../../controllers/viewer.controller.js";
 
-const router = Router();
+export default class ViewRouter extends routerHandler {
+  init() {
+    /*
+     * This router allows to show the products in the main view
+     */
 
-/*
- * This router allows to show the products in the main view
- */
+    this.get(
+      "/",
+      { accessLevel: "PUBLIC", needAuth: false },
+      redirectLoginController
+    );
 
-router.get("/", redirectLoginController);
-
-/**
- *  This router render the chat, that work with websocket
- */
-router.get("/chat", chatController);
-
-
-export default router;
+    /**
+     *  This router render the chat, that work with websocket
+     */
+    this.get(
+      "/chat",
+      { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
+      chatController
+    );
+  }
+}

@@ -1,5 +1,9 @@
 import UserModel from "../dao/models/user.model.js";
-import { createHash, isValidPassword, generateToken, extractCookie } from "../helpers/auth.helper.js";
+import {
+  createHash,
+  isValidPassword,
+  generateToken
+} from "../helpers/auth.helper.js";
 
 export default class Auth {
   constructor() {}
@@ -19,7 +23,7 @@ export default class Auth {
         last_name,
         email,
         age: parseInt(age),
-        password: createHash(password)
+        password: createHash(password),
       };
       console.log(newUser);
       if (
@@ -66,7 +70,7 @@ export default class Auth {
         last_name: "",
         email: userEmail,
         age: "",
-        password: ""
+        password: "",
       };
 
       const result = await UserModel.create(newUser);
@@ -95,5 +99,10 @@ export default class Auth {
     } catch (error) {
       return done(error);
     }
+  };
+
+  findUserById = async (id) => {
+    const result = await UserModel.findById(id);
+    return result;
   };
 }

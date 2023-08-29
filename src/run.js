@@ -1,10 +1,9 @@
 import ProductRouter from "../src/routers/products/product.router.js";
 import cartRouter from "../src/routers/carts/cart.router.js";
-import viewRouter from "../src/routers/main/view.router.js";
 import ChatRouter from "../src/routers/chat/chat.router.js";
 import AuthRouter from "./routers/login/auth.router.js";
-import productViewsRouter from '../src/routers/products/product.views.router.js'
-import { passportCall } from "./utils.js";
+import ProductViewerRouter from "../src/routers/products/product.views.router.js";
+import ViewRouter from "../src/routers/main/view.router.js";
 
 /**
  * Run the socket and the app
@@ -48,12 +47,14 @@ const run = (io, app) => {
   /**
    * Products view
    */
-  app.use('/products', passportCall('jwt'), productViewsRouter)
+  const productViewerRouter = new ProductViewerRouter();
+  app.use('/products', productViewerRouter.getRouter())
 
   /**
    * Main view route
    */
-  app.use("/", viewRouter);
+  const viewRouter = new ViewRouter()
+  app.use("/", viewRouter.getRouter());
 
   /**
    * Socket IO initilization

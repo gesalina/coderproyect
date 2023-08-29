@@ -12,23 +12,43 @@ export default class ProductRouter extends routerHandler {
     /**
      * This endpoint return all the products with pagination available
      */
-    this.get("/", ["PUBLIC"], getProductsController);
+    this.get(
+      "/",
+      { accessLevel: "PUBLIC", needAuth: false },
+      getProductsController
+    );
 
     /**
      * This endpoint filter a product by ID
      */
-    this.get("/:pid", ["PUBLIC"], getProductsByIdController);
+    this.get(
+      "/:pid",
+      { accessLevel: "PUBLIC", needAuth: false },
+      getProductsByIdController
+    );
     /**
      * This endpoint create a new product
      */
-    this.post("/", ["PUBLIC"], createProductController);
+    this.post(
+      "/",
+      { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
+      createProductController
+    );
     /**
      * This endpoint delete a product by ID
      */
-    this.delete("/:pid", ["PUBLIC"], deleteProductController);
+    this.delete(
+      "/:pid",
+      { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
+      deleteProductController
+    );
     /**
      * This endpoint update a product
      */
-    this.put("/:pid", ["ADMIN"], updateProductController);
+    this.put(
+      "/:pid",
+      { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
+      updateProductController
+    );
   }
 }

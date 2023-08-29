@@ -1,22 +1,20 @@
-import { Router } from "express";
-import { productsController, realTimeProductsController } from "../../controllers/viewer.controller.js";
-import { handlePolicies } from "../../utils.js";
+import routerHandler from "../router.js";
+import {
+  productsController,
+  realTimeProductsController,
+} from "../../controllers/viewer.controller.js";
 
-const router = Router();
+export default class ProductViewerRouter extends routerHandler {
+  init() {
+    /**
+     * This router render the products view with the user information
+     */
+    this.get("/", { accessLevel: "PUBLIC", needAuth: false}, productsController);
 
-/**
- * This router render the products view with the user information
- */
-router.get("/", productsController);
-
-/**
- * This router allows to render the products on realtime
- * have a form and a delete button working with websocket
- */
-router.get(
-    "/realtimeproducts",
-    handlePolicies(['PUBLIC']),
-    realTimeProductsController
-  );
-
-  export default router;
+    /**
+     * This router allows to render the products on realtime
+     * have a form and a delete button working with websocket
+     */
+    this.get("/realtimeproducts", { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" }, realTimeProductsController);
+  }
+}

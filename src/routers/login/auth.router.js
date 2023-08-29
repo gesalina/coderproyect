@@ -1,4 +1,3 @@
-import { passportCall } from "../../utils.js";
 import routerHandler from "../router.js";
 import passport from "passport";
 import {
@@ -18,14 +17,18 @@ export default class AuthRouter extends routerHandler {
     /**
      * This route get the login form
      */
-    this.get("/login", ["PUBLIC"], loginFormController);
+    this.get(
+      "/login",
+      { accessLevel: "PUBLIC", needAuth: false },
+      loginFormController
+    );
 
     /**
      * API for register a new user
      */
     this.post(
       "/register",
-      ["PUBLIC"],
+      { accessLevel: "PUBLIC", needAuth: false },
       passport.authenticate("register", {
         failureRedirect: "/session/failRegister",
       }),
@@ -35,19 +38,27 @@ export default class AuthRouter extends routerHandler {
     /**
      * Failed route
      */
-    this.get("/failRegister", ["PUBLIC"], failRegisterController);
+    this.get(
+      "/failRegister",
+      { accessLevel: "PUBLIC", needAuth: false },
+      failRegisterController
+    );
 
     /**
      * This route get the register form
      */
 
-    this.get("/register", ["PUBLIC"], registerFormController);
+    this.get(
+      "/register",
+      { accessLevel: "PUBLIC", needAuth: false },
+      registerFormController
+    );
     /**
      * API for login, this auth the user
      */
     this.post(
       "/login",
-      ["PUBLIC"],
+      { accessLevel: "PUBLIC", needAuth: false },
       passport.authenticate("login", {
         failureRedirect: "/session/failLogin",
       }),
@@ -57,12 +68,20 @@ export default class AuthRouter extends routerHandler {
     /**
      * Login failed route
      */
-    this.get("/failLogin", ["PUBLIC"], failLoginController);
+    this.get(
+      "/failLogin",
+      { accessLevel: "PUBLIC", needAuth: false },
+      failLoginController
+    );
 
     /**
      * API to destroy the sessions
      */
-    this.post("/logout", ["PUBLIC"], logoutController);
+    this.post(
+      "/logout",
+      { accessLevel: "PUBLIC", needAuth: false },
+      logoutController
+    );
 
     /**
      * API to login with github, redirect to the passport github middleware to get
@@ -70,7 +89,7 @@ export default class AuthRouter extends routerHandler {
      */
     this.get(
       "/github",
-      ["PUBLIC"],
+      { accessLevel: "PUBLIC", needAuth: false },
       passport.authenticate("github", { scope: ["user:email"] }),
       async (request, response) => {}
     );
@@ -81,11 +100,15 @@ export default class AuthRouter extends routerHandler {
      */
     this.get(
       "/githubcallback",
-      ["PUBLIC"],
+      { accessLevel: "PUBLIC", needAuth: false },
       passport.authenticate("github", { failureRedirect: "/session/login" }),
       gitHubController
     );
 
-    this.get("/current", ["USER"], passportCall("current"), userDataController);
+    this.get(
+      "/current",
+      { accessLevel: "ADMIN", needAuth: true, strategy: "current" },
+      userDataController
+    );
   }
 }

@@ -1,16 +1,11 @@
 import passport from "passport";
 import passport_jwt from "passport-jwt";
-import UserModel from "../dao/models/user.model.js";
 import local from "passport-local";
-import Auth from "../services/auth.service.js";
 import GitHubStrategy from "passport-github2";
 import dotenv from "dotenv";
-import AuthValidator from "../dao/dto/auth.dto.js";
 import { extractCookie } from "../helpers/auth.helper.js";
-import {authRepository } from '../repositories/repository.js'
+import { authRepository } from "../repositories/repository.js";
 dotenv.config();
-
-const auth = new Auth();
 
 const JWTStrategy = passport_jwt.Strategy;
 const ExtractJWT = passport_jwt.ExtractJwt;
@@ -51,7 +46,7 @@ passport.use(
     },
     async (username, password, done) => {
       try {
-        return auth.loginUser(username, password, done);
+        return authRepository.loginUser(username, password, done);
       } catch (error) {
         return done(error);
       }
@@ -72,7 +67,12 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        return auth.gitHubLogin(accessToken, refreshToken, profile, done);
+        return authRepository.gitHubLogin(
+          accessToken,
+          refreshToken,
+          profile,
+          done
+        );
       } catch (error) {
         return done(error);
       }
@@ -91,7 +91,7 @@ passport.use(
     },
     async (jwt_payload, done) => {
       try {
-        return auth.jwtAuth(jwt_payload, done);
+        return authRepository.jwtAuth(jwt_payload, done);
       } catch (error) {
         return done(error);
       }
@@ -103,12 +103,12 @@ passport.use(
   "current",
   new JWTStrategy(
     {
-      jwtFromRequest: ExtractJWT.fromExtractors([auth.extractCookie]),
+      jwtFromRequest: ExtractJWT.fromExtractors([extractCookie]),
       secretOrKey: process.env.JWT_PRIVATE_KEY,
     },
     async (jwt_payload, done) => {
       try {
-        return auth.getUser(jwt_payload, done);
+        return authRepository.getUser(jwt_payload, done);
       } catch (error) {
         return done(error);
       }
@@ -127,7 +127,7 @@ passport.serializeUser((user, done) => {
  * and return our user id
  */
 passport.deserializeUser(async (id, done) => {
-  const user = await UserModel.findById(id);
+  const user = await authRepository.findUserById(id);
   done(null, user);
 });
 

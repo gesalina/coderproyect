@@ -1,4 +1,4 @@
-import { Router } from "express";
+import routerHandler from "../router.js";
 import {
   createCartController,
   deleteProductController,
@@ -9,59 +9,75 @@ import {
   updateCartController,
   updateProductController,
 } from "../../controllers/carts.controller.js";
-const router = Router();
 
-/**
- * This endpoint get all carts
- */
-router.get("/", getCartsController);
-/**
- * This endpoint get the products of a cart
- */
-router.get("/:cid/products", getCartProductsController);
-/**
- * This endpoint find a cart by ID
- */
-router.get("/:cid", findCartByIdController);
-/**
- * This endpoint create a new cart
- */
-router.post("/", createCartController);
-/**
- * This endpoint add or update the product the a specific cart | OLDTEST ROUTE
- */
-// router.post("/:cid/products/:pid", async (request, response) => {
-//   let cartId = request.params.cid;
-//   let productId = request.params.pid;
-//   const { quantity } = request.body;
-//   try {
-//     const cartUpdate = await cart.updateCart(cartId, productId, quantity);
-//     if (cartUpdate.error) {
-//       return response
-//         .status(404)
-//         .json({ status: "error", error: cartUpdate.error });
-//     }
-//     response.json({ status: "Success" });
-//   } catch (error) {
-//     return response.status(404).json({ status: "error", error: error });
-//   }
-// });
-/**
- *  This endpoint delete a product from a cart | EXPERIMENTAL
- *
- */
-router.delete("/:cid/products/:pid", deleteProductController);
-/**
- * This ENDPOINT update the cart with a array of products
- */
-router.put("/:cid", updateCartController);
-/**
- *  This endpoint update the quantity of a product in a specific cart
- */
-router.put("/:cid/products/:pid", updateProductController);
+export default class CartRouter extends routerHandler {
+  init() {
+    /**
+     * This endpoint get all carts
+     */
+    this.get(
+      "/",
+      { accessLevel: "PUBLIC", needAuth: false },
+      getCartsController
+    );
+    /**
+     * This endpoint get the products of a cart
+     */
+    this.get(
+      "/:cid/products",
+      { accessLevel: ["PUBLIC"], needAuth: true, strategy: "jwt" },
+      getCartProductsController
+    );
+    /**
+     * This endpoint find a cart by ID
+     */
+    this.get(
+      "/:cid",
+      { accessLevel: "PUBLIC", needAuth: true, strategy: "jwt" },
+      findCartByIdController
+    );
+    /**
+     * This endpoint create a new cart
+     */
+    this.post(
+      "/",
+      { accessLevel: "PUBLIC", needAuth: true, strategy: "jwt" },
+      createCartController
+    );
 
-/**
- * This ENDPOINT delete all products from a specific cart
- */
-router.delete("/:cid", emptyCartProductController);
-export default router;
+    /**
+     *  This endpoint delete a product from a cart | EXPERIMENTAL
+     *
+     */
+    this.delete(
+      "/:cid/products/:pid",
+      { accessLevel: "PUBLIC", needAuth: true, strategy: "jwt" },
+      deleteProductController
+    );
+    /**
+     * This ENDPOINT update the cart with a array of products
+     */
+    this.put(
+      "/:cid",
+      { accessLevel: "PUBLIC", needAuth: true, strategy: "jwt" },
+      updateCartController
+    );
+    /**
+     *  This endpoint update the quantity of a product in a specific cart
+     */
+    this.put(
+      "/:cid/products/:pid",
+      { accessLevel: "PUBLIC", needAuth: true, strategy: "jwt" },
+      updateProductController
+    );
+
+    /**
+     * This ENDPOINT delete all products from a specific cart
+     */
+    this.delete(
+      "/:cid",
+      { accessLevel: "PUBLIC", needAuth: true, strategy: "jwt" },
+      emptyCartProductController
+    );
+  }
+}
