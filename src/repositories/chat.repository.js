@@ -1,3 +1,5 @@
+import CartValidator from '../dao/dto/cart.dto.js';
+
 export default class ChatRepository {
     constructor(dao) {
       this.dao = dao;
@@ -8,7 +10,8 @@ export default class ChatRepository {
   }
 
 insertMessage = async(request) => {
-    const result = this.dao.insertMessage(request);
+    const validate = new CartValidator(request);
+    const result = this.dao.insertMessage(validate);
     return result;
 }
   }
