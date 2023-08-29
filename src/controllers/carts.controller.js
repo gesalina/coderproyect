@@ -5,9 +5,9 @@ const cartService = new Cart();
 export const getCartsController = async (request, response) => {
   try {
     const result = await cartRepository.getCarts();
-    return response.status(200).json(result);
+        return response.sendSuccess(result);
   } catch (error) {
-    return response.status(404).json({ status: "error", error: error });
+    return response.sendServerError(error.message);
   }
 };
 
@@ -20,9 +20,9 @@ export const getCartProductsController = async (request, response) => {
         .status(404)
         .json({ status: "error", error: result.error });
     }
-    response.status(200).json(result);
+    return response.sendSuccess(result);
   } catch (error) {
-    return response.status(404).json({ status: "error", error: error });
+    return response.sendServerError(error.message);
   }
 };
 
@@ -35,9 +35,9 @@ export const findCartByIdController = async (request, response) => {
         .status(404)
         .json({ status: "error", error: result.error });
     }
-    response.json(result);
+     return response.sendSuccess(result);
   } catch (error) {
-    return response.status(404).json({ status: "error", error: error });
+      return response.sendServerError(error.message);
   }
 };
 
@@ -45,9 +45,11 @@ export const createCartController = async (request, response) => {
   const {userId} = request.body;
   try {
     const result = await cartReposity.createCart(userId);
-    response.json({ message: "Carrito creado satisfactoriamente" });
+         return response.sendSuccess(result);
+
   } catch (error) {
-    return response.status(404).json({ status: "error", error: error });
+          return response.sendServerError(error.message);
+
   }
 };
 
@@ -61,9 +63,10 @@ export const deleteProductController = async (request, response) => {
         .status(404)
         .json({ status: "error", error: result.error });
     }
-    response.json(result);
+         return response.sendSuccess(result);
+
   } catch (error) {
-    response.status(404).json({ status: "error", error: error });
+          return response.sendServerError(error.message);
   }
 };
 
@@ -77,9 +80,9 @@ export const updateCartController = async (request, response) => {
         .status(404)
         .json({ status: "error", error: result.error });
     }
-    response.status(200).json(result);
+         return response.sendSuccess(result);
   } catch (error) {
-    response.status(404).json({ status: "error", error: error });
+          return response.sendServerError(error.message);
   }
 };
 
@@ -94,9 +97,9 @@ export const updateProductController = async (request, response) => {
         .status(404)
         .json({ status: "error", error: result.error });
     }
-    response.status(200).json(result);
+         return response.sendSuccess(result);
   } catch (error) {
-    response.status(404).json({ status: "error", error: error });
+          return response.sendServerError(error.message);
   }
 };
 
@@ -109,8 +112,8 @@ export const emptyCartProductController = async (request, response) => {
         .status(404)
         .json({ status: "error", error: result.error });
     }
-    response.status(200).json(result);
+         return response.sendSuccess(result);
   } catch (error) {
-    response.status(404).json({ status: "error", error: error });
+          return response.sendServerError(error.message);
   }
 };
