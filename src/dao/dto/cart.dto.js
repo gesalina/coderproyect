@@ -1,6 +1,7 @@
 export default class CartValidator {
   constructor(cart) {
     (this.userId = cart.userId),
-      (this.products = cart.products)
+    this.cartId = cart.cartId || null,
+    this.quantity = cart.quantity || null
   }
 }

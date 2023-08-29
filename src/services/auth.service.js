@@ -2,14 +2,13 @@ import UserModel from "../dao/models/user.model.js";
 import {
   createHash,
   isValidPassword,
-  generateToken
+  generateToken,
 } from "../helpers/auth.helper.js";
 
 export default class Auth {
   constructor() {}
 
   createUser = async (request, username, password, done) => {
-    const { first_name, last_name, email, age } = request.body;
     try {
       const user = await UserModel.findOne({ email: username });
 
@@ -19,10 +18,7 @@ export default class Auth {
       }
 
       const newUser = {
-        first_name,
-        last_name,
-        email,
-        age: parseInt(age),
+        ...request,
         password: createHash(password),
       };
       console.log(newUser);

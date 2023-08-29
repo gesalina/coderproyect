@@ -44,7 +44,6 @@ export default class Cart {
     try {
       const result = await cartModel.create({ id: generateId, userId: user });
       const find = await userModel.findOne({ id: user });
-
       find.carts.push({ cart: result._id });
       return result;
     } catch (error) {

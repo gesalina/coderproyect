@@ -38,7 +38,7 @@ export const findCartByIdController = async (request, response) => {
 export const createCartController = async (request, response) => {
   const { userId } = request.body;
   try {
-    const result = await cartReposity.createCart(userId);
+    const result = await cartRepository.createCart(userId);
     return response.sendSuccess(result);
   } catch (error) {
     return response.sendServerError(error.message);

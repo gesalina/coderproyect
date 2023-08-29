@@ -1,5 +1,5 @@
 import ProductRouter from "../src/routers/products/product.router.js";
-import cartRouter from "../src/routers/carts/cart.router.js";
+import CartRouter from "./routers/cart/cart.router.js";
 import ChatRouter from "../src/routers/chat/chat.router.js";
 import AuthRouter from "./routers/login/auth.router.js";
 import ProductViewerRouter from "../src/routers/products/product.views.router.js";
@@ -28,7 +28,8 @@ const run = (io, app) => {
   /**
    * Cart router
    */
-  app.use("/api/carts", cartRouter);
+  const cartRouter = new CartRouter();
+  app.use("/api/carts", cartRouter.getRouter());
 
   /**
    * Chat router

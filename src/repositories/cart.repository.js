@@ -1,4 +1,4 @@
-import ProductValidator from "../dao/dto/product.dto.js";
+import CartValidator from "../dao/dto/cart.dto.js";
 
 export default class CartRepository {
   constructor(dao) {
@@ -14,11 +14,13 @@ export default class CartRepository {
   */
   getCartById = async(request) => {
     const result = this.dao.getCartById(request);
+    return result;
   }
 
   createCart = async(request) => {
     const validate = new CartValidator(request);
     const result = this.dao.createCart(validate);
+    return result;
   }
   /**
   * The request is the cart ID

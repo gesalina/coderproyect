@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
   role: { type: String, default: "user" },
   isActive: { type: Boolean, default: true },
   hasAuthenticationMethod: { type: Boolean, default: false },
-  authCode: { type: String, default: [] },
+  authCode: { type: String, default: '' },
 });
 
 /**
