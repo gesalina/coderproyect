@@ -31,7 +31,8 @@ export default class ProductRouter extends routerHandler {
      */
     this.post(
       "/",
-      { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
+      // { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
+      { accessLevel: "PUBLIC", needAuth: false},
       createProductController
     );
     /**

@@ -97,6 +97,8 @@ export default class Cart {
       if (!cart) {
         return (this.error = { error: "This cart does not exists" });
       }
+      if (!productData)
+        return (this.error = { error: "The product ID does not exist" });
       cart.products.push({ product: productData._id, quantity: quantity });
       return await cartModel.updateOne({ cartId }, cart);
     } catch (error) {

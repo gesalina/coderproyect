@@ -11,7 +11,6 @@ import {
   registerFormController,
   userDataController,
 } from "../../controllers/session.controller.js";
-
 export default class AuthRouter extends routerHandler {
   init() {
     /**

@@ -19,7 +19,7 @@ const productSchema = new mongoose.Schema({
     required: true,
   },
   status: { type: String, required: true },
-  stock: { type: String, required: true },
+  stock: { type: Number, required: true },
 });
 
 productSchema.plugin(mongoosePaginate);

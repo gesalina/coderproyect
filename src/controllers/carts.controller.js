@@ -66,7 +66,7 @@ export const updateCartController = async (request, response) => {
   const cartId = request.params.cid;
   const { product, quantity } = request.body;
   try {
-    const result = await cartRepositoy.addProductCart(
+    const result = await cartRepository.addProductCart(
       cartId,
       product,
       quantity
@@ -85,7 +85,7 @@ export const updateProductController = async (request, response) => {
   const productId = request.params.pid;
   const { quantity } = request.body;
   try {
-    const result = await cartReposity.updateProductQuantity(
+    const result = await cartRepository.updateProductQuantity(
       cartId,
       productId,
       quantity
