@@ -111,3 +111,10 @@ export const emptyCartProductController = async (request, response) => {
     return response.sendServerError(error.message);
   }
 };
+
+export const finishPurchaseController = async(request, response) => {
+  // const user = request.user.email;
+  const cartId = request.params.cid;
+  const result = await cartRepository.finishPurchase(request, cartId);
+  return response.sendSuccess(result);
+}

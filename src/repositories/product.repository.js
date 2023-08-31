@@ -30,4 +30,5 @@ export default class ProductRepository {
     const result = await this.dao.updateProduct(id, validate);
     return result
   }
+
 }

@@ -50,4 +50,9 @@ export default class CartRepository {
     return result;
   }
 
+  finishPurchase = async(request, cartId) => {
+    const result = await this.dao.finishPurchase(request, cartId);
+    return result;
+  }
+
 }
