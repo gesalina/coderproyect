@@ -22,6 +22,10 @@ const ticketSchema = new mongoose.Schema({
   products: {
     type: Array,
     default: []
+  },
+  productWithoutStock: {
+    type: Array,
+    default: []
   }
 });
 
