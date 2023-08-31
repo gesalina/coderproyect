@@ -21,7 +21,6 @@ export default class Ticket {
         if (!product)
           return (this.error = { error: "Does not exist a cart with that id" });
         totalAmount += product.price * products.quantity;
-        console.log(products.quantity);
       }
     } catch (error) {
       console.log(error);
@@ -82,7 +81,9 @@ export default class Ticket {
           product: item.product,
           quantity: item.quantity,
         })),
-        productWithoutStock: discardedProducts,
+        productWithoutStock: discardedProducts.map((item) => ({
+          product: item,
+        })),
       };
 
       const saveTicket = await ticketModel.create(newTicket);
