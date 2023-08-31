@@ -25,6 +25,9 @@ const cartSchema = new mongoose.Schema({
     ],
     default: [],
   },
+  ticket: {
+    type: mongoose.Schema.Types.ObjectId
+  }
 });
 
 mongoose.set("strictPopulate", false);

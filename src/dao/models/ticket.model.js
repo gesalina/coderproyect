@@ -19,6 +19,10 @@ const ticketSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  products: {
+    type: Array,
+    default: []
+  }
 });
 
 mongoose.set("strictPopulate", false);

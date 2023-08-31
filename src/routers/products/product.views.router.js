@@ -9,7 +9,7 @@ export default class ProductViewerRouter extends routerHandler {
     /**
      * This router render the products view with the user information
      */
-    this.get("/", { accessLevel: "PUBLIC", needAuth: false}, productsController);
+    this.get("/", { accessLevel: "PUBLIC", needAuth: true, strategy: "jwt"}, productsController);
 
     /**
      * This router allows to render the products on realtime

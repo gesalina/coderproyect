@@ -1,5 +1,4 @@
-import { cartRepository } from "../repositories/repository.js";
-
+import { cartRepository, ticketRepository } from "../repositories/repository.js";
 export const getCartsController = async (request, response) => {
   try {
     const result = await cartRepository.getCarts();
@@ -113,8 +112,8 @@ export const emptyCartProductController = async (request, response) => {
 };
 
 export const finishPurchaseController = async(request, response) => {
-  // const user = request.user.email;
   const cartId = request.params.cid;
-  const result = await cartRepository.finishPurchase(request, cartId);
+  const result = await ticketRepository.finishPurchase(request, cartId);
+  console.log(result)
   return response.sendSuccess(result);
 }

@@ -22,8 +22,8 @@ export const productsController = async (request, response) => {
     plugins: "?plugins=aspect-ratio",
     view_name: "Products View",
     showCart: true,
-    username: request.user.first_name,
-    role: request.user.role,
+    username: request.user.user.first_name,
+    role: request.user.user.role,
     products: products.docs,
     prevLink: products.hasPrevPage
       ? `http://localhost:8080?page=${products.prevPage}&limit=${products.limit}`
