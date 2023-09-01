@@ -69,5 +69,7 @@ export const updateProductController = async (request, response) => {
   }
 };
 
+export const seederProductController = async() => {}
+
 
 
