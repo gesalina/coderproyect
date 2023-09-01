@@ -5,6 +5,7 @@ import {
   createProductController,
   deleteProductController,
   updateProductController,
+  seederProductController
 } from "../../controllers/product.controller.js";
 
 export default class ProductRouter extends routerHandler {
@@ -51,5 +52,7 @@ export default class ProductRouter extends routerHandler {
       { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
       updateProductController
     );
+
+    this.get('/mockingproducts',{ accessLevel: "ADMIN", needAuth: true, strategy: "jwt" }, seederProductController);
   }
 }
