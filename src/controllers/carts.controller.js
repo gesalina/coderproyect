@@ -116,6 +116,11 @@ export const emptyCartProductController = async (request, response) => {
 
 export const finishPurchaseController = async (request, response) => {
   const cartId = request.params.cid;
+  try{
   const result = await ticketRepository.finishPurchase(request, cartId);
   return response.sendSuccess(result);
+  }catch (error){
+    console.log(error);
+  }
+
 };
