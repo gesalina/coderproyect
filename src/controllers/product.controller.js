@@ -1,8 +1,9 @@
 import { productRepository } from "../repositories/repository.js";
+import { productSeeder } from "../seeder/productSeeder.js";
 
 export const getProductsController = async (request, response) => {
   try {
-    const result = await productRepository.getProducts(request)
+    const result = await productRepository.getProducts(request);
     return response.sendSuccess(result);
   } catch (error) {
     return response.sendServerError(error.message);
@@ -45,7 +46,7 @@ export const deleteProductController = async (request, response) => {
     if (result.error) {
       return response.sendRequestError(result.error);
     }
-    
+
     response.sendSuccess(result);
   } catch (error) {
     return response.sendServerError(error.message);
@@ -69,7 +70,11 @@ export const updateProductController = async (request, response) => {
   }
 };
 
-export const seederProductController = async() => {}
-
-
-
+export const seederProductController = async (request, response) => {
+  try {
+    const result = await productRepository.createManyProducts(productSeeder(2));
+    return response.sendSuccess(result);
+  } catch (error) {
+    return response.sendServerError(error.message);
+  }
+};

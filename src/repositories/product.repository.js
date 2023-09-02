@@ -4,20 +4,20 @@ export default class ProductRepository {
     this.dao = dao;
   }
 
-  getProducts = async(request) => {
+  getProducts = async (request) => {
     const result = await this.dao.getProducts(request);
-    return result
-  }
+    return result;
+  };
 
-  getProductsById = async(request) => {
+  getProductsById = async (request) => {
     const result = await this.dao.getProductsById(request);
-    return result
-  }
+    return result;
+  };
 
-  deleteProduct = async(request) => {
+  deleteProduct = async (request) => {
     const result = await this.dao.deleteProduct(request);
     return result;
-  }
+  };
 
   createProduct = async (request, response) => {
     const validate = new ProductValidator(request);
@@ -28,7 +28,11 @@ export default class ProductRepository {
   updateProduct = async (id, request) => {
     const validate = new ProductValidator(request);
     const result = await this.dao.updateProduct(id, validate);
-    return result
-  }
+    return result;
+  };
 
+  createManyProducts = async (request) => {
+    const result = await this.dao.createManyProducts(request);
+    return result;
+  };
 }

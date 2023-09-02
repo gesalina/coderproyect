@@ -85,9 +85,10 @@ btn.addEventListener('click', async () => {
         products.forEach(product => {
             let row = document.createElement('tr');
             row.className = 'bg-white border-b dark:bg-gray-800 dark:border-gray-700';
+            // product.id se va a llamar product._id
             row.innerHTML = `
             <td class="px-6 py-4">
-                    ${product.id}
+                    ${product.id} 
                 </td>
                 <td class="px-6 py-4">
                     <img class="w-10 h-10 rounded" src="${product.thumbnail}" alt="${product.thumbnail}">

@@ -72,7 +72,7 @@ export default class Cart {
    */
   deleteProductFromCart = async (cartId, productId) => {
     try {
-      const productData = await productModel.findOne({ id: productId });
+      const productData = await productModel.findOne({ id: productId /** _id: productId */ });
       const deleteProduct = await cartModel.updateOne(
         { id: cartId },
         { $pull: { products: { product: productData._id } } }
@@ -93,7 +93,7 @@ export default class Cart {
   addProductCart = async (cartId, productId, quantity) => {
     try {
       const cart = await cartModel.findOne({ id: cartId });
-      const productData = await productModel.findOne({ id: productId });
+      const productData = await productModel.findOne({ id: productId /** _id: productId */});
       if (!cart) {
         return (this.error = { error: "This cart does not exists" });
       }
@@ -112,7 +112,7 @@ export default class Cart {
   updateProductQuantity = async (cartId, productId, quantity) => {
     try {
       const cart = await cartModel.findOne({ id: cartId });
-      const productData = await productModel.findOne({ id: productId });
+      const productData = await productModel.findOne({ id: productId /** _id: productId */ });
       if (!cart) {
         return (this.error = { error: "Cant find that cart" });
       }

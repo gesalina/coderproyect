@@ -5,7 +5,7 @@ import {
   createProductController,
   deleteProductController,
   updateProductController,
-  seederProductController
+  seederProductController,
 } from "../../controllers/product.controller.js";
 
 export default class ProductRouter extends routerHandler {
@@ -17,6 +17,12 @@ export default class ProductRouter extends routerHandler {
       "/",
       { accessLevel: "PUBLIC", needAuth: false },
       getProductsController
+    );
+
+    this.get(
+      "/mockingproducts/",
+      { accessLevel: "PUBLIC", needAuth: true, strategy: "jwt" },
+      seederProductController
     );
 
     /**
@@ -33,7 +39,7 @@ export default class ProductRouter extends routerHandler {
     this.post(
       "/",
       // { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
-      { accessLevel: "PUBLIC", needAuth: false},
+      { accessLevel: "PUBLIC", needAuth: false },
       createProductController
     );
     /**
@@ -52,7 +58,5 @@ export default class ProductRouter extends routerHandler {
       { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
       updateProductController
     );
-
-    this.get('/mockingproducts',{ accessLevel: "ADMIN", needAuth: true, strategy: "jwt" }, seederProductController);
   }
 }

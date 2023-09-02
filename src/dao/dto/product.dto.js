@@ -5,6 +5,7 @@ export default class ProductValidator {
       (this.price = product.price),
       (this.thumbnail = product.thumbnail);
     this.code = product.code;
+    this.status = product.status;
     this.stock = product.stock;
   }
 }
