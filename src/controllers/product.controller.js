@@ -42,7 +42,7 @@ export const createProductController = async (request, response) => {
     ) {
       handleError.createError({
         name: "Product creation error",
-        cause: generateProductError({}),
+        cause: generateProductError(product),
         message: "Error trying to create the product",
         code: EError.INVALID_TYPES_ERROR,
       });
