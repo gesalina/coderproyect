@@ -1,4 +1,7 @@
 import { productModel } from "../dao/models/product.model.js";
+import handleError from "./errors/errorHandler.service.js";
+import EErrors from "../services/errors/errorHandler.dictionary.js";
+import { generateProductError } from "./errors/messages/errorMessages.js";
 
 export default class Product {
   constructor() {
@@ -58,7 +61,9 @@ export default class Product {
    */
   getProductsById = async (productId) => {
     try {
-      const product = await productModel.find({ id: productId /** _id: productId */ });
+      const product = await productModel.find({
+        id: productId /** _id: productId */,
+      });
       if (!product || product <= 0) {
         return (this.error = { error: "Product not found" });
       }
@@ -87,6 +92,21 @@ export default class Product {
    */
   createProduct = async (product) => {
     try {
+      if (
+        !product.title ||
+        !product.description ||
+        !product.price ||
+        !product.thumbnail ||
+        !product.stock ||
+        !product.code
+      ) {
+        return handleError.createError({
+          name: "Product creation error",
+          message: "Error trying to create the product",
+          cause: generateProductError(product),
+          code: EErrors.INVALID_TYPES_ERROR,
+        });
+      }
       const result = await productModel.create({
         id: await this.#generateId(),
         ...product,
@@ -114,7 +134,9 @@ export default class Product {
    */
   deleteProduct = async (productId) => {
     try {
-      const result = await productModel.findOneAndDelete({ id: productId /** _id: productId */});
+      const result = await productModel.findOneAndDelete({
+        id: productId /** _id: productId */,
+      });
       if (!result || result <= 0) {
         return (this.error = { error: "Product not found" });
       }
@@ -131,7 +153,7 @@ export default class Product {
   updateProduct = async (productId, data) => {
     try {
       const result = await productModel.findOneAndUpdate(
-        { id: productId /** _id: productId */},
+        { id: productId /** _id: productId */ },
         data
       );
       if (!result || result <= 0) {

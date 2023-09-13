@@ -9,8 +9,6 @@ import passport from "passport";
 import cookieParser from "cookie-parser";
 import initializePassport from "../src/middlewares/auth.middleware.js";
 import run from "./run.js";
-import errorHandler from "./middlewares/errors/errorHandler.middleware.js";
-
 dotenv.config();
 
 const app = express();
@@ -49,10 +47,6 @@ initializePassport();
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-//
-app.use(errorHandler);
-
 /**
  * Cookie parser
  */

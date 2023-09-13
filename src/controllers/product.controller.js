@@ -1,7 +1,5 @@
 import { productRepository } from "../repositories/repository.js";
 import { productSeeder } from "../seeder/productSeeder.js";
-import handleError from "../services/errors/errorHandler.service.js";
-import { generateProductError } from "../services/errors/messages/errorMessages.js";
 
 export const getProductsController = async (request, response) => {
   try {
@@ -32,21 +30,6 @@ export const getProductsByIdController = async (request, response) => {
 export const createProductController = async (request, response) => {
   let product = request.body;
   try {
-    if (
-      !product.title ||
-      !product.description ||
-      !product.price ||
-      !product.thumbnail ||
-      !product.stock ||
-      !product.code
-    ) {
-      handleError.createError({
-        name: "Product creation error",
-        cause: generateProductError(product),
-        message: "Error trying to create the product",
-        code: EError.INVALID_TYPES_ERROR,
-      });
-    }
     const getProducts = await productRepository.getProducts(request);
     const result = await productRepository.createProduct(product);
     request.app.get("socketio").emit("updateProducts", getProducts.payload);
