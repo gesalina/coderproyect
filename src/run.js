@@ -4,8 +4,6 @@ import ChatRouter from "../src/routers/chat/chat.router.js";
 import AuthRouter from "./routers/login/auth.router.js";
 import ProductViewerRouter from "../src/routers/products/product.views.router.js";
 import ViewRouter from "../src/routers/main/view.router.js";
-import errorHandlerMiddleware from "../src/middlewares/errors/errorHandler.middleware.js";
-
 /**
  * Run the socket and the app
  */
@@ -58,8 +56,6 @@ const run = (io, app) => {
   const viewRouter = new ViewRouter()
   app.use("/", viewRouter.getRouter());
 
-  //Error middleware
-  app.use(errorHandlerMiddleware)
   /**
    * Socket IO initilization
    */

@@ -1,7 +1,4 @@
 import { productModel } from "../dao/models/product.model.js";
-import handleError from "./errors/errorHandler.service.js";
-import EErrors from "../services/errors/errorHandler.dictionary.js";
-import { generateProductError } from "./errors/messages/errorMessages.js";
 
 export default class Product {
   constructor() {
@@ -92,21 +89,6 @@ export default class Product {
    */
   createProduct = async (product) => {
     try {
-      if (
-        !product.title ||
-        !product.description ||
-        !product.price ||
-        !product.thumbnail ||
-        !product.stock ||
-        !product.code
-      ) {
-        return handleError.createError({
-          name: "Product creation error",
-          message: "Error trying to create the product",
-          cause: generateProductError(product),
-          code: EErrors.INVALID_TYPES_ERROR,
-        });
-      }
       const result = await productModel.create({
         id: await this.#generateId(),
         ...product,

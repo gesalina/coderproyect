@@ -19,3 +19,7 @@ export const generateProductError = (product) => {
     * stock: need to be a Number, received ${product.stock}
     `;
 };
+
+export const deleteProductError = (product) => {
+  return `The propertie ${product.id} is incompleted or not valid.`;
+};

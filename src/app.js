@@ -8,6 +8,8 @@ import MongoStore from "connect-mongo";
 import passport from "passport";
 import cookieParser from "cookie-parser";
 import initializePassport from "../src/middlewares/auth.middleware.js";
+import errorHandlerMiddleware from "../src/middlewares/errors/errorHandler.middleware.js";
+import logger from "./middlewares/logger/logger.middleware.js";
 import run from "./run.js";
 dotenv.config();
 
@@ -63,6 +65,7 @@ app.use(express.urlencoded({ extended: true }));
  */
 app.use("/content", express.static("./public"));
 
+// app.use(errorHandlerMiddleware)
 /**
  * Establish database connection
  */
