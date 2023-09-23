@@ -89,7 +89,7 @@ export default class routerHandler {
    *  accessLevel: PUBLIC, USER, ADMIN
    */
   handlePolicies = (policies) => (request, response, next) => {
-    const authHeaders = request.signedCookies[process.env.JWT_COOKIE_NAME];
+    const authHeaders = request.cookies[process.env.JWT_COOKIE_NAME];
     if (policies.accessLevel === "PUBLIC") return next();
     if (!authHeaders)
       return response
@@ -97,7 +97,7 @@ export default class routerHandler {
         .send({ status: "error", error: "Unauthorized" });
     const token = this.extractCookie(request);
     let user = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
-    if (!policies.accessLevel.includes(user.role.toUpperCase()))
+    if (!policies.accessLevel.includes(user.user.role.toUpperCase()))
       return response
         .status(403)
         .send({ error: "error", error: "Not privileges" });

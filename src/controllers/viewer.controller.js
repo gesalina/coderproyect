@@ -21,15 +21,12 @@ export const productsController = async (request, response) => {
   return response.render("products", {
     plugins: "?plugins=aspect-ratio",
     view_name: "Products View",
-    showCart: true,
+    isAuth: true,
+    user: request.user.user,
     username: request.user.user.first_name,
     role: request.user.user.role,
-    products: products.docs,
-    prevLink: products.hasPrevPage
-      ? `http://localhost:8080?page=${products.prevPage}&limit=${products.limit}`
-      : null,
-    nextLink: products.hasNextPage
-      ? `http://localhost:8080?page=${products.nextPage}&limit=${products.limit}`
-      : null,
+    products: products.payload,
+    prevLink: products.prevLink,
+    nextLink: products.nextLink,
   });
 };

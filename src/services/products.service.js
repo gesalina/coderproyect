@@ -41,10 +41,10 @@ export default class Product {
         hasPrevPage: products.hasPrevPage,
         hasNextPage: products.hasNextPage,
         prevLink: products.hasPrevPage
-          ? `http://localhost:8080?page=${products.prevPage}&limit=${products.limit}`
+          ? `http://localhost:8080/products?page=${products.prevPage}&limit=${products.limit}`
           : null,
         nextLink: products.hasNextPage
-          ? `http://localhost:8080?page=${products.nextPage}&limit=${products.limit}`
+          ? `http://localhost:8080/products?page=${products.nextPage}&limit=${products.limit}`
           : null,
       };
     } catch (error) {
