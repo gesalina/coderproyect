@@ -1,5 +1,5 @@
 import UserModel from "../dao/models/user.model.js";
-import TokenModel from "../dao/models/token.model.js"
+import TokenModel from "../dao/models/token.model.js";
 import {
   createHash,
   isValidPassword,
@@ -102,4 +102,38 @@ export default class Auth {
     const result = await UserModel.findById(id);
     return result;
   };
+
+  requestPasswordReset = async (email) => {
+    try {
+      const user = await UserModel.findOne({ email });
+      if (!user) {
+        return null;
+      }
+      let token = await TokenModel.findOne({userId: user._id});
+      if(token){
+        await token.deleteOne();
+      }
+      let resetToken;
+      const hash = createHash(resetToken);
+
+      await TokenModel.create({
+        userId: user._id,
+        token: hash,
+        createdAt: Date.now()
+      })
+
+      const link = `${url}/passwordReset?token=${resetToken}&id=${user._id}`;
+      sendEmail(user.email, "Password Reset Request",{name: user.first_name, link: link}, "requestResetPassword.handlebars");
+      return link;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  resetPassword = async(userId, token, password) => {
+    let passwordResetToken = await TokenModel.findOne({userId});
+    if(!passwordResetToken){
+      throw new Error("Invalid or expired password reset token");
+    }
+  }
 }
