@@ -1,4 +1,5 @@
 import UserModel from "../dao/models/user.model.js";
+import TokenModel from "../dao/models/token.model.js"
 import {
   createHash,
   isValidPassword,
