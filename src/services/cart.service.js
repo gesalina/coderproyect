@@ -72,7 +72,7 @@ export default class Cart {
    */
   deleteProductFromCart = async (cartId, productId) => {
     try {
-      const productData = await productModel.findOne({ id: productId /** _id: productId */ });
+      const productData = await productModel.findOne({ _id: productId });
       const deleteProduct = await cartModel.updateOne(
         { id: cartId },
         { $pull: { products: { product: productData._id } } }
@@ -90,15 +90,20 @@ export default class Cart {
   /**
    * Update the cart with a array of products
    */
-  addProductCart = async (cartId, productId, quantity) => {
+  addProductCart = async (cartId, productId, quantity, email) => {
     try {
       const cart = await cartModel.findOne({ id: cartId });
-      const productData = await productModel.findOne({ id: productId /** _id: productId */});
+      const productData = await productModel.findOne({ _id: productId });
       if (!cart) {
         return (this.error = { error: "This cart does not exists" });
       }
       if (!productData)
         return (this.error = { error: "The product ID does not exist" });
+      if (productData.owner === email) {
+        return (this.error = {
+          error: "You cant add your own product to you cart",
+        });
+      }
       cart.products.push({ product: productData._id, quantity: quantity });
       return await cartModel.updateOne({ cartId }, cart);
     } catch (error) {
@@ -112,7 +117,7 @@ export default class Cart {
   updateProductQuantity = async (cartId, productId, quantity) => {
     try {
       const cart = await cartModel.findOne({ id: cartId });
-      const productData = await productModel.findOne({ id: productId /** _id: productId */ });
+      const productData = await productModel.findOne({ _id: productId });
       if (!cart) {
         return (this.error = { error: "Cant find that cart" });
       }
@@ -152,6 +157,4 @@ export default class Cart {
     const getCartId = await this.getCarts();
     return getCartId.length === 0 ? 1 : getCartId.at(-1).id + 1;
   };
-
-  
 }

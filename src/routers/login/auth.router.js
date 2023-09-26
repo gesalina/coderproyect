@@ -10,6 +10,14 @@ import {
   registerController,
   registerFormController,
   userDataController,
+  userChangePassword,
+  userChangePasswordForm,
+  resetPassword,
+  recoverPasswordForm,
+  passwordResetForm,
+  requestPasswordReset,
+  adminPanelView,
+  userAccessLevel
 } from "../../controllers/session.controller.js";
 export default class AuthRouter extends routerHandler {
   init() {
@@ -103,11 +111,81 @@ export default class AuthRouter extends routerHandler {
       passport.authenticate("github", { failureRedirect: "/session/login" }),
       gitHubController
     );
-
+    /**
+     * This route get the user data, but only with admin rights
+     */
     this.get(
-      "/current",
-      { accessLevel: "ADMIN", needAuth: true, strategy: "current" },
+      "/profile",
+      { accessLevel: ["USER","ADMIN"], needAuth: true, strategy: "current" },
       userDataController
     );
+    
+    /**
+     * This route get the password change form
+     */
+    this.get(
+      "/profile/changePassword",
+      {accessLevel: ["USER","ADMIN"], needAuth: true, strategy: "jwt"},
+      userChangePasswordForm
+    )
+    /**
+     * This route change the password
+     */
+    this.post(
+      "/profile/changePassword",
+      {accessLevel: ["USER","ADMIN"], needAuth: true, strategy: "jwt"},
+      userChangePassword
+    )
+    /**
+     * This route get the recover password form
+     */
+    this.get(
+      "/recoverPassword/",
+      {accessLevel: "PUBLIC", needAuth: false},
+      recoverPasswordForm
+    )
+    /**
+     * This route get the request to send a email
+     * with the token for the password reset
+     */
+    this.post(
+      "/recoverPassword/",
+      {accessLevel: "PUBLIC", needAuth: false},
+      requestPasswordReset
+    )
+    /**
+     * This route show the new password form
+     */
+    this.get(
+      "/passwordReset/",
+      {accessLevel: "PUBLIC", needAuth: false},
+      passwordResetForm
+    )
+    /**
+     * This route reset the password
+     */
+    this.post(
+      "/passwordReset/",
+      {accessLevel: "PUBLIC", needAuth: false},
+      resetPassword
+    )
+
+    /**
+     * This route get the form to change the accesslevel
+     */
+    this.get(
+      "/adminpanel/users",
+      {accessLevel: "ADMIN" , needAuth: true, strategy: "jwt"},
+      adminPanelView
+    )
+
+    /**
+     * This route change the user access level
+     */
+    this.post(
+      "/adminpanel/users",
+      {accessLevel: "ADMIN" , needAuth: true, strategy: "jwt"},
+      userAccessLevel
+    )
   }
 }

@@ -66,12 +66,13 @@ export const deleteProductController = async (request, response) => {
 
 export const updateCartController = async (request, response) => {
   const cartId = request.params.cid;
-  const { product, quantity } = request.body;
+  const { product, quantity, email } = request.body;
   try {
     const result = await cartRepository.addProductCart(
       cartId,
       product,
-      quantity
+      quantity,
+      email
     );
     if (result.error) {
       return response.sendRequestError(result.error);

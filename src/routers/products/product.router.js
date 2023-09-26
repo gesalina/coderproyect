@@ -21,7 +21,7 @@ export default class ProductRouter extends routerHandler {
 
     this.get(
       "/mockingproducts/",
-      { accessLevel: "PUBLIC", needAuth: true, strategy: "jwt" },
+      { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
       seederProductController
     );
 
@@ -38,8 +38,7 @@ export default class ProductRouter extends routerHandler {
      */
     this.post(
       "/",
-      // { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
-      { accessLevel: "PUBLIC", needAuth: false },
+      { accessLevel: ["PREMIUM","ADMIN"], needAuth: true, strategy: "jwt" },
       createProductController
     );
     /**
@@ -47,7 +46,7 @@ export default class ProductRouter extends routerHandler {
      */
     this.delete(
       "/:pid",
-      { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
+      { accessLevel: ["PREMIUM","ADMIN"], needAuth: true, strategy: "jwt" },
       deleteProductController
     );
     /**

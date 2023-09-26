@@ -1,4 +1,5 @@
 import { productModel } from "../dao/models/product.model.js";
+import userModel from "../dao/models/user.model.js";
 
 export default class Product {
   constructor() {
@@ -59,25 +60,12 @@ export default class Product {
   getProductsById = async (productId) => {
     try {
       const product = await productModel.find({
-        id: productId /** _id: productId */,
+        _id: productId,
       });
       if (!product || product <= 0) {
         return (this.error = { error: "Product not found" });
       }
       return product;
-    } catch (error) {
-      console.log(error);
-      return null;
-    }
-  };
-
-  /**
-   * This function generate new id in each new product inserted
-   */
-  #generateId = async () => {
-    try {
-      let getProductsId = await productModel.find();
-      return getProductsId.length === 0 ? 1 : getProductsId.at(-1).id + 1;
     } catch (error) {
       console.log(error);
       return null;
@@ -90,14 +78,11 @@ export default class Product {
   createProduct = async (product) => {
     try {
       const result = await productModel.create({
-        id: await this.#generateId(),
         ...product,
-        status: true,
       });
       return result;
     } catch (error) {
-      console.log(error);
-      return null;
+      return (this.error = { error: error.message });
     }
   };
 
@@ -114,15 +99,26 @@ export default class Product {
   /**
    * This function delete a specific ID
    */
-  deleteProduct = async (productId) => {
+  deleteProduct = async (request) => {
+    const id = request.params.pid;
+    const { email } = request.body;
     try {
-      const result = await productModel.findOneAndDelete({
-        id: productId /** _id: productId */,
-      });
-      if (!result || result <= 0) {
-        return (this.error = { error: "Product not found" });
+      const product = await productModel.findById({ _id: id }).lean();
+
+      const findUser = await userModel
+        .findOne({ email: email, role: "admin" })
+        .lean();
+
+      if (findUser || email === product.owner) {
+        const result = await productModel.findOneAndDelete({
+          _id: id,
+        });
+        return result;
+      } else {
+        return (this.error = {
+          error: "Cant delete this product because you are not owner",
+        });
       }
-      return result;
     } catch (error) {
       console.log(error);
       return null;
@@ -135,7 +131,7 @@ export default class Product {
   updateProduct = async (productId, data) => {
     try {
       const result = await productModel.findOneAndUpdate(
-        { id: productId /** _id: productId */ },
+        { _id: productId },
         data
       );
       if (!result || result <= 0) {

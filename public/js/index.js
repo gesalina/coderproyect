@@ -87,9 +87,6 @@ btn.addEventListener('click', async () => {
             row.className = 'bg-white border-b dark:bg-gray-800 dark:border-gray-700';
             // product.id se va a llamar product._id
             row.innerHTML = `
-            <td class="px-6 py-4">
-                    ${product.id} 
-                </td>
                 <td class="px-6 py-4">
                     <img class="w-10 h-10 rounded" src="${product.thumbnail}" alt="${product.thumbnail}">
                 </td>
@@ -109,7 +106,7 @@ btn.addEventListener('click', async () => {
                 ${product.price}
                 </td>
                 <td class="px-6 py-4">
-                    <button type="button" id="deleteBtn" value="${product.id}" class="buttonsDel focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
+                    <button type="button" id="deleteBtn" value="${product._id}" class="buttonsDel focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
                 </td>`
                 tableBody.appendChild(row);
         });
