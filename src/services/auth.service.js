@@ -193,7 +193,7 @@ export default class Auth {
        * Find the user with the request _id
        */
       const searchUser = await UserModel.findOne({
-        _id: request.user.user._id,
+        _id: request.user.user._id || user.id,
       });
       /**
        * Validate if actual password are equals

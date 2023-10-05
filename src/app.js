@@ -8,9 +8,17 @@ import MongoStore from "connect-mongo";
 import passport from "passport";
 import cookieParser from "cookie-parser";
 import initializePassport from "../src/middlewares/auth.middleware.js";
-import errorHandlerMiddleware from "../src/middlewares/errors/errorHandler.middleware.js";
-import logger from "./middlewares/logger/logger.middleware.js";
 import run from "./run.js";
+
+/**
+ * API DOCUMENTATION DEPENDENCIES
+ */
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
+
+/**
+ * ENVIROMENT CONFIGURATION
+ */
 dotenv.config();
 
 const app = express();
@@ -67,6 +75,23 @@ app.use("/content", express.static("./public"));
 
 // app.use(errorHandlerMiddleware)
 /**
+ * API DOCUMENTATION
+ */
+
+const swaggerOptions = {
+  definition:{
+    openapi:'3.0.1',
+    info:{
+      title: "Documentation about tenda API",
+      description:'This API is for coderhouse backend course'
+    },
+  },
+  apis: [`./docs/**/*.yaml`]
+}
+const specs = swaggerJSDoc(swaggerOptions);
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
+
+/**
  * Establish database connection
  */
 
@@ -77,6 +102,7 @@ try {
   const serverHttp = app.listen(process.env.PORT, () =>
     console.log(`Server is running at: http://localhost:8080`)
   );
+  
   const io = new Server(serverHttp);
   app.set("socketio", io);
   run(io, app);
