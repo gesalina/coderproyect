@@ -13,7 +13,7 @@ const productSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  status: { type: String, required: true, default: true },
+  status: { type: Boolean , required: true, default: true },
   stock: { type: Number, required: true },
   owner: {
     type: String,

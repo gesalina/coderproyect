@@ -1,24 +1,143 @@
 paths:
   /api/products:
     get:
-      summary: Get the products
       tags:
         - Products
+      summary: Get all products
       responses:
-      "200":
-      description: Successfull operation
-      content:
-      aplication/json:
-      schema:
-      type: array
-    security:
-      -bearerAuth: ["PREMIUM", "ADMIN"]
+        '200':
+          description: Successfull operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+      # Include a description of the required permissions
+      security:
+        - bearerAuth: ["PUBLIC"]
     post:
-      summary: Create a new product
       tags:
         - Products
+      summary: Create a new product
       requestBody:
-      required: true
-      content:
-      aplication/json:
-      
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+
+  /api/products/{pid}:
+    get:
+      tags:
+        - Products
+      summary: Get a product by ID
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID of the product
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+      # Include a description of the required permissions
+      security:
+        - bearerAuth: ["PUBLIC"]
+    put:
+      tags:
+        - Products
+      summary: Update a product by ID
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID of the product
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+      # Include a description of the required permissions
+      security:
+        - bearerAuth: ["PREMIUM", "ADMIN"]
+    delete:
+      tags:
+        - Products
+      summary: Delete a product by ID
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID of the product
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+      # Include a description of the required permissions
+      security:
+        - bearerAuth: ["PREMIUM", "ADMIN"]
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the product.
+        description:
+          type: string
+          description: Description of the product.
+        price:
+          type: number
+          description: Price of the product.
+        thumbnail:
+          type: string
+          items:
+            type: string
+          description: List of product thumbnails.
+        code:
+          type: string
+          description: Unique product code.
+        stock:
+          type: integer
+          description: Quantity in stock of the product.
+        status:
+          type: boolean
+          description: Product status.
+        owner:
+          type: string
+          description: Email of owner
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
