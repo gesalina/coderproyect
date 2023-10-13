@@ -27,7 +27,7 @@ export const getCartProductsController = async (request, response) => {
 export const findCartByIdController = async (request, response) => {
   const cartId = request.params.cid;
   try {
-    const result = await cartRepository.findCartById(cartId);
+    const result = await cartRepository.getCartById(cartId);
     if (result.error) {
       return response.sendRequestError(result.error);
     }
