@@ -32,6 +32,7 @@ const userSchema = new mongoose.Schema({
   isActive: { type: Boolean, default: true },
   hasAuthenticationMethod: { type: Boolean, default: false },
   authCode: { type: String, default: '' },
+  last_connection:{ type: Date, default: ''}
 });
 
 /**
