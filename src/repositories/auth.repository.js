@@ -45,21 +45,26 @@ export default class AuthRepository {
     return result;
   };
 
-  changePassword = async(request) => {
+  changePassword = async (request) => {
     const result = await this.dao.changePassword(request);
-    return result
-  }
-  
-  requestPasswordReset = async(request) => {
+    return result;
+  };
+
+  requestPasswordReset = async (request) => {
     const result = await this.dao.requestPasswordReset(request);
     return result;
-  }
-  resetPassword = async(request) => {
+  };
+  resetPassword = async (request) => {
     const result = await this.dao.resetPassword(request);
     return result;
-  }
-  userAccessLevel = async(request) => {
+  };
+  userAccessLevel = async (request) => {
     const result = await this.dao.userAccessLevel(request);
     return result;
-  }
+  };
+
+  userFileUpload = async (request) => {
+    const result = await this.dao.userFileUpload(request);
+    return result;
+  };
 }

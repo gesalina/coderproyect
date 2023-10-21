@@ -8,6 +8,7 @@ import {
 } from "../helpers/auth.helper.js";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
+import { uploader } from "../helpers/files.helper.js";
 
 export default class Auth {
   constructor() {
@@ -53,6 +54,11 @@ export default class Auth {
       }
       const token = generateToken(user);
       user.token = token;
+      await UserModel.findOneAndUpdate(
+        { email: username },
+        { $set: { last_connection: Date.now() } },
+        { new: true }
+      );
       return done(null, user);
     } catch (error) {
       return done(error);
@@ -254,4 +260,8 @@ export default class Auth {
       return error;
     }
   };
+
+  userFileUpload = async(request) => {
+   console.log(request.body)
+  }
 }

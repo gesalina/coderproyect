@@ -17,7 +17,8 @@ import {
   passwordResetForm,
   requestPasswordReset,
   adminPanelView,
-  userAccessLevel
+  userAccessLevel,
+  userFileUpload
 } from "../../controllers/session.controller.js";
 export default class AuthRouter extends routerHandler {
   init() {
@@ -189,11 +190,11 @@ export default class AuthRouter extends routerHandler {
     )
      /**
      * This route change the user access level
-    this.post(
+      */
+     this.post(
       "/users/:uid/documents",
-      {accessLevel: "PUBLIC" , needAuth: true, strategy: "jwt"},
-      userDocuments
+      {accessLevel: "PUBLIC" , needAuth: false},
+      userFileUpload
     )
-    */
   }
 }

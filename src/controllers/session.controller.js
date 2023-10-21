@@ -154,3 +154,7 @@ export const userAccessLevel = async (request, response) => {
     
   }
 }
+
+export const userFileUpload = async(request, response) => {
+  console.log(request.body)
+}

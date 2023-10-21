@@ -15,6 +15,7 @@ import run from "./run.js";
  */
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
+import bodyParser from "body-parser";
 
 /**
  * ENVIROMENT CONFIGURATION
@@ -22,6 +23,9 @@ import swaggerUiExpress from "swagger-ui-express";
 dotenv.config();
 
 const app = express();
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
 
 /**
  * Set the templates engine
@@ -79,17 +83,17 @@ app.use("/content", express.static("./public"));
  */
 
 const swaggerOptions = {
-  definition:{
-    openapi:'3.0.1',
-    info:{
+  definition: {
+    openapi: "3.0.1",
+    info: {
       title: "Documentation about tenda API",
-      description:'This API is for coderhouse backend course'
+      description: "This API is for coderhouse backend course",
     },
   },
-  apis: [`./docs/**/*.yaml`]
-}
+  apis: [`./docs/**/*.yaml`],
+};
 const specs = swaggerJSDoc(swaggerOptions);
-app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 /**
  * Establish database connection
@@ -102,7 +106,7 @@ try {
   const serverHttp = app.listen(process.env.PORT, () =>
     console.log(`Server is running at: http://localhost:8080`)
   );
-  
+
   const io = new Server(serverHttp);
   app.set("socketio", io);
   run(io, app);

@@ -22,8 +22,8 @@ const userSchema = new mongoose.Schema({
   documents: {
     type: [
       {
-          name: {type: String},
-          reference: {type: String},
+        name: { type: String },
+        reference: { type: String },
       },
     ],
     default: [],
@@ -31,8 +31,8 @@ const userSchema = new mongoose.Schema({
   role: { type: String, default: "user" },
   isActive: { type: Boolean, default: true },
   hasAuthenticationMethod: { type: Boolean, default: false },
-  authCode: { type: String, default: '' },
-  last_connection:{ type: Date, default: ''}
+  authCode: { type: String, default: "" },
+  last_connection: { type: Date, default: Date.now },
 });
 
 /**
