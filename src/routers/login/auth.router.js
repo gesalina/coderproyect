@@ -187,5 +187,13 @@ export default class AuthRouter extends routerHandler {
       {accessLevel: "ADMIN" , needAuth: true, strategy: "jwt"},
       userAccessLevel
     )
+     /**
+     * This route change the user access level
+    this.post(
+      "/users/:uid/documents",
+      {accessLevel: "PUBLIC" , needAuth: true, strategy: "jwt"},
+      userDocuments
+    )
+    */
   }
 }
