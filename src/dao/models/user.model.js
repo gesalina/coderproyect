@@ -19,6 +19,15 @@ const userSchema = new mongoose.Schema({
     ],
     default: [],
   },
+  documents: {
+    type: [
+      {
+          name: {type: String},
+          reference: {type: String},
+      },
+    ],
+    default: [],
+  },
   role: { type: String, default: "user" },
   isActive: { type: Boolean, default: true },
   hasAuthenticationMethod: { type: Boolean, default: false },
