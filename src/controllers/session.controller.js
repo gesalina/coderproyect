@@ -43,13 +43,14 @@ export const loginController = async (request, response) => {
 };
 
 export const logoutController = async (request, response) => {
-  request.session.destroy((error) => {
+  request.session.destroy(async (error) => {
     if (error) {
       return response.sendServerError({
         status: "error",
         message: "Ocurrio un error",
       });
     }
+    await authRepository.logoutHandler(request);
     return response
       .clearCookie(process.env.JWT_COOKIE_NAME)
       .redirect("/session/login");
@@ -147,14 +148,18 @@ export const adminPanelView = async (request, response) => {
 export const userAccessLevel = async (request, response) => {
   try {
     const result = await authRepository.userAccessLevel(request);
-    if(result.error) return response.sendUserError(result.error);
+    if (result.error) return response.sendUserError(result.error);
     return response.sendSuccess(result);
   } catch (error) {
     return response.sendServerError(error.message);
-    
   }
-}
+};
 
-export const userFileUpload = async(request, response) => {
-  console.log(request.body)
-}
+export const userFileUpload = async (request, response) => {
+  try {
+    const result = await authRepository.userFileUpload(request);
+    return response.sendSuccess(result);
+  } catch (error) {
+    return response.sendServerError(error.message);
+  }
+};

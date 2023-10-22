@@ -1,5 +1,6 @@
 import routerHandler from "../router.js";
 import passport from "passport";
+import { uploader } from "../../helpers/files.helper.js";
 import {
   failLoginController,
   failRegisterController,
@@ -194,6 +195,7 @@ export default class AuthRouter extends routerHandler {
      this.post(
       "/users/:uid/documents",
       {accessLevel: "PUBLIC" , needAuth: false},
+      uploader.any('file'),
       userFileUpload
     )
   }

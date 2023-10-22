@@ -24,6 +24,12 @@ dotenv.config();
 
 const app = express();
 
+/**
+ * Middleware for parse to JSON
+ */
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -65,12 +71,6 @@ app.use(passport.session());
  * Cookie parser
  */
 app.use(cookieParser());
-
-/**
- * Middleware for parse to JSON
- */
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 /**
  * Set the static folder

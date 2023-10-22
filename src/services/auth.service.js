@@ -8,7 +8,6 @@ import {
 } from "../helpers/auth.helper.js";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-import { uploader } from "../helpers/files.helper.js";
 
 export default class Auth {
   constructor() {
@@ -240,11 +239,19 @@ export default class Auth {
   userAccessLevel = async (request) => {
     try {
       let user = request.body;
+      const premiumDocuments = [
+        "Identificacion",
+        "Comprobante de domicilio",
+        "Comprobante de estado de cuenta",
+      ];
       const { email, accessLevel } = user;
       const findUser = await UserModel.findOne({ email: email });
       if (!findUser)
         return (this.error = { error: "The user doest not exist" });
-
+      const findDocs = findUser.documents.map(function (document) {
+        if (premiumDocuments.includes(document.name)) return true;
+      });
+      if(!findDocs && accessLevel['PREMIUM']) return this.error = {error: 'Is needed all the documents before to change the user role to premium'}
       if (findUser.role === accessLevel)
         return (this.error = { error: "This user has that access level" });
       const result = await UserModel.findOneAndUpdate(
@@ -261,7 +268,38 @@ export default class Auth {
     }
   };
 
-  userFileUpload = async(request) => {
-   console.log(request.body)
-  }
+  logoutHandler = async (request) => {
+    try {
+      const user = await UserModel.findOneAndUpdate(
+        { email: request.user.email },
+        { $set: { last_connection: Date.now() } },
+        { new: true }
+      );
+      if (!user) return (this.error = { error: "User not found" });
+    } catch (error) {
+      return error;
+    }
+  };
+
+  userFileUpload = async (request) => {
+    try {
+      const user = await UserModel.findById({ _id: request.params.uid });
+      if (!user) return (this.error = { error: "User not found" });
+      request.files.forEach(async (file) => {
+        const updateDocuments = await UserModel.findOneAndUpdate(
+          { _id: user._id },
+          {
+            $push: {
+              documents: {
+                name: file.filename,
+                reference: `http://localhost:8080/public/img/${request.body.customPath}`,
+              },
+            },
+          }
+        );
+      });
+    } catch (error) {
+      return error;
+    }
+  };
 }

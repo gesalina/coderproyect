@@ -67,4 +67,9 @@ export default class AuthRepository {
     const result = await this.dao.userFileUpload(request);
     return result;
   };
+
+  logoutHandler = async(request) => {
+    const result = await this.dao.logoutHandler(request);
+    return result;
+  }
 }
