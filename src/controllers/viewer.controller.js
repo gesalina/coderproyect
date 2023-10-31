@@ -1,4 +1,5 @@
-import { productRepository } from "../repositories/repository.js";
+import {productRepository } from "../repositories/repository.js";
+
 
 export const redirectLoginController = async (request, response) => {
   response.redirect("/session/login");

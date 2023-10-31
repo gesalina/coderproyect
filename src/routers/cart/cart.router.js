@@ -8,7 +8,8 @@ import {
   getCartsController,
   updateCartController,
   updateProductController,
-  finishPurchaseController
+  finishPurchaseController,
+  viewCart
 } from "../../controllers/carts.controller.js";
 
 export default class CartRouter extends routerHandler {
@@ -42,7 +43,7 @@ export default class CartRouter extends routerHandler {
      */
     this.post(
       "/",
-      { accessLevel: "PUBLIC", needAuth: true, strategy: "jwt" },
+      { accessLevel: "PUBLIC", needAuth: false },
       createCartController
     );
 
@@ -85,5 +86,8 @@ export default class CartRouter extends routerHandler {
      * Ticket Router
      */
     this.get("/:cid/purchase", { accessLevel: "PUBLIC", needAuth: false }, finishPurchaseController );
+
+    this.get("/:cid/cart", { accessLevel: "PUBLIC", needAuth: false }, viewCart)
+    
   }
 }

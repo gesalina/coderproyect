@@ -4,6 +4,7 @@ import ChatRouter from "../src/routers/chat/chat.router.js";
 import AuthRouter from "./routers/login/auth.router.js";
 import ProductViewerRouter from "../src/routers/products/product.views.router.js";
 import ViewRouter from "../src/routers/main/view.router.js";
+import PaymentRouter from "../src/routers/payment/payment.router.js"
 /**
  * Run the socket and the app
  */
@@ -55,6 +56,12 @@ const run = (io, app) => {
    */
   const viewRouter = new ViewRouter()
   app.use("/", viewRouter.getRouter());
+
+    /**
+   * Main view route
+   */
+    const paymentRouter = new PaymentRouter()
+    app.use("/api/payment/", paymentRouter.getRouter());
 
   /**
    * Socket IO initilization

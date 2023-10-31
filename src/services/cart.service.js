@@ -26,7 +26,7 @@ export default class Cart {
    */
   getCartById = async (cartId) => {
     try {
-      const cart = await cartModel.findById({ _id: cartId });
+      const cart = await cartModel.findById({ _id: cartId }).populate('products.product');
       if (!cart || cart <= 0) {
         return (this.error = { error: "Cart not found" });
       }
@@ -41,9 +41,20 @@ export default class Cart {
    */
   createCart = async (user) => {
     try {
-      const result = await cartModel.create({userId: user });
-      const find = await userModel.findOne({ id: user });
-      find.carts.push({ cart: result._id });
+      const findCart = await cartModel.findOne({ userId: user });
+      if (findCart)
+        return (this.error = { error: "This user has a active cart" });
+      const result = await cartModel.create({ userId: user });
+      await userModel.findOneAndUpdate(
+        { _id: user },
+        {
+          $push: {
+            carts: {
+              cart: result._id,
+            },
+          },
+        }
+      );
       return result;
     } catch (error) {
       console.log(error);
@@ -93,6 +104,7 @@ export default class Cart {
     try {
       const cart = await cartModel.findOne({ _id: cartId });
       const productData = await productModel.findOne({ _id: productId });
+
       if (!cart) {
         return (this.error = { error: "This cart does not exists" });
       }
@@ -103,7 +115,16 @@ export default class Cart {
           error: "You cant add your own product to you cart",
         });
       }
+      if (quantity > productData.stock) {
+        return (this.error = {
+          error: "This quantity is not available",
+        });
+      }
       cart.products.push({ product: productData._id, quantity: quantity });
+      await productModel.updateOne(
+        { _id: productId },
+        { $inc: { stock: -quantity } }
+      );
       return await cartModel.updateOne({ _id: cartId }, cart);
     } catch (error) {
       console.log(error);
@@ -120,6 +141,15 @@ export default class Cart {
       if (!cart) {
         return (this.error = { error: "Cant find that cart" });
       }
+      if (quantity > productData.stock) {
+        return (this.error = {
+          error: "The quantity is greater than the available stock",
+        });
+      }
+      await productModel.updateOne(
+        { _id: productId },
+        { $inc: { stock: -quantity } }
+      );
       return cartModel.updateOne(
         { _id: cartId, "products.product": productData._id },
         { $inc: { "products.$.quantity": quantity } }

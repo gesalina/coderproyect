@@ -251,7 +251,11 @@ export default class Auth {
       const findDocs = findUser.documents.map(function (document) {
         if (premiumDocuments.includes(document.name)) return true;
       });
-      if(!findDocs && accessLevel['PREMIUM']) return this.error = {error: 'Is needed all the documents before to change the user role to premium'}
+      if (!findDocs && accessLevel["PREMIUM"])
+        return (this.error = {
+          error:
+            "Is needed all the documents before to change the user role to premium",
+        });
       if (findUser.role === accessLevel)
         return (this.error = { error: "This user has that access level" });
       const result = await UserModel.findOneAndUpdate(
@@ -297,6 +301,39 @@ export default class Auth {
             },
           }
         );
+      });
+    } catch (error) {
+      return error;
+    }
+  };
+
+  getAllUsers = async (request) => {
+    try {
+      const users = await UserModel.find({})
+        .select("-_id first_name email role")
+        .lean()
+        .exec();
+      return users;
+    } catch (error) {
+      return error;
+    }
+  };
+
+  deleteUsers = async (request) => {
+    try {
+      const last_connection = new Date();
+      last_connection.setDate(last_connection.getDate() - 2);
+      const inactiveUsers = await UserModel.find({
+        last_connection: { $lt: last_connection },
+      });
+      // If the last_connection of the users is less than 2 days return false
+      inactiveUsers.find((user) => {
+        sendEmail(
+          user.email,
+          "Your account has been deleted",
+          "<div>You account has been deleted because the last connection is greater than 2 days</div>"
+        );
+        // HERE ADD DELETE METHOD
       });
     } catch (error) {
       return error;

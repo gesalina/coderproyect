@@ -68,8 +68,18 @@ export default class AuthRepository {
     return result;
   };
 
-  logoutHandler = async(request) => {
+  logoutHandler = async (request) => {
     const result = await this.dao.logoutHandler(request);
     return result;
-  }
+  };
+
+  getAllUsers = async (request) => {
+    const result = await this.dao.getAllUsers(request);
+    return result;
+  };
+
+  deleteUsers = async (request) => {
+    const result = await this.dao.deleteUsers(request);
+    return result;
+  };
 }

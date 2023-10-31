@@ -18,8 +18,7 @@ export default class CartRepository {
   }
 
   createCart = async(request) => {
-    const validate = new CartValidator(request);
-    const result = this.dao.createCart(validate);
+    const result = this.dao.createCart(request);
     return result;
   }
   /**

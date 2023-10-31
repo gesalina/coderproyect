@@ -1,31 +1,67 @@
 const getAddButton = document.querySelectorAll(".addButton");
 const getCartValue = document.getElementById("cartCount");
+const getUser = document.getElementById("userId");
+let getActiveCart = localStorage.getItem("cartId");
+let productAmmount = localStorage.getItem("productAmmount") || 0;
+const purchase = document.getElementById("purchase");
+const finishPurchase = document.getElementById("finishPurchase");
+
+
+finishPurchase?.addEventListener('click',function(){
+  window.location.href = `http://localhost:8080/api/payment/createCheckout/${getActiveCart}`;
+})
+
+purchase?.addEventListener('click', function(){
+  window.location.href = `http://localhost:8080/api/carts/${getActiveCart}/cart`;
+})
+
+getCartValue.textContent = productAmmount;
 
 getAddButton.forEach((button) => {
-  button.addEventListener("click", function () {addProduct(button)});
+  button.addEventListener("click", function () {
+    addProduct(button);
+  });
 });
+
+const createCart = async () => {
+  const response = await fetch("/api/carts/", {
+    method: "POST",
+    body: JSON.stringify({ userId: getUser.value }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const result = await response.json();
+  if (result.status === "error") return alert(result.error);
+  return result.payload._id;
+};
 
 const addProduct = async (button) => {
   const body = {
-    product: parseInt(button.value),
+    product: button.value,
     quantity: 1,
   };
   try {
-    const response = await fetch("/api/carts/1/", {
+    if (!getActiveCart) {
+      const query = await createCart();
+      getActiveCart = query;
+      localStorage.setItem("cartId", getActiveCart);
+    }
+
+    const addProduct = await fetch(`/api/carts/${getActiveCart}`, {
       method: "PUT",
       body: JSON.stringify(body),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    const result = await response.json();
 
-    if (result.status === "error") {
-      throw new Error(result.error);
-    } else {
-        console.log(getCartValue.value)
-      getCartValue.innerHTML = parseInt(getCartValue.innerHTML) + 1;
-    }
+    const result = await addProduct.json();
+    if (result.status === "error") return alert(result.error);
+    productAmmount += 1;
+    getCartValue.textContent = productAmmount;
+    localStorage.setItem("productAmmount", parseInt(productAmmount));
+    return alert("Product Added");
   } catch (error) {
     alert(`Ocurrio un error ${error}`);
   }

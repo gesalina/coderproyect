@@ -34,10 +34,10 @@ export default class Ticket {
 
   finishPurchase = async (request, cartId) => {
     const cart = await cartModel.findOne({
-      id: cartId,
+      _id: cartId,
       userId: request.user._id.toHexString(),
     });
-
+    
     if (!cart)
       return (this.error = { error: "You do not have a cart with this id" });
 
@@ -72,7 +72,7 @@ export default class Ticket {
         processedProducts.push(product);
       }
     }
-    if (processedProducts.length > 0) {
+    if (processedProducts.length >= 0) {
       const newTicket = {
         code: randomstring.generate(12),
         amount: await this.calculateCartAmount(processedProducts),

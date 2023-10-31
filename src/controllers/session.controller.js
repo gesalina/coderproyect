@@ -163,3 +163,21 @@ export const userFileUpload = async (request, response) => {
     return response.sendServerError(error.message);
   }
 };
+
+export const getAllUsers = async (request, response) => {
+  try {
+    const result = await authRepository.getAllUsers(request);
+    return response.sendSuccess(result);
+  } catch (error) {
+    return response.sendServerError(error.message);
+  }
+};
+
+export const deleteUsers = async (request, response) => {
+  try {
+    const result = await authRepository.deleteUsers(request);
+    return response.sendSuccess(result);
+  } catch (error) {
+    return response.sendServerError(error.message);
+  }
+};

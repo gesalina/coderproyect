@@ -19,7 +19,9 @@ import {
   requestPasswordReset,
   adminPanelView,
   userAccessLevel,
-  userFileUpload
+  userFileUpload,
+  getAllUsers,
+  deleteUsers,
 } from "../../controllers/session.controller.js";
 export default class AuthRouter extends routerHandler {
   init() {
@@ -118,85 +120,103 @@ export default class AuthRouter extends routerHandler {
      */
     this.get(
       "/profile",
-      { accessLevel: ["USER","ADMIN"], needAuth: true, strategy: "current" },
+      { accessLevel: ["USER", "ADMIN"], needAuth: true, strategy: "current" },
       userDataController
     );
-    
+
     /**
      * This route get the password change form
      */
     this.get(
       "/profile/changePassword",
-      {accessLevel: ["USER","ADMIN"], needAuth: true, strategy: "jwt"},
+      { accessLevel: ["USER", "ADMIN"], needAuth: true, strategy: "jwt" },
       userChangePasswordForm
-    )
+    );
     /**
      * This route change the password
      */
     this.post(
       "/profile/changePassword",
-      {accessLevel: ["USER","ADMIN"], needAuth: true, strategy: "jwt"},
+      { accessLevel: ["USER", "ADMIN"], needAuth: true, strategy: "jwt" },
       userChangePassword
-    )
+    );
     /**
      * This route get the recover password form
      */
     this.get(
       "/recoverPassword/",
-      {accessLevel: "PUBLIC", needAuth: false},
+      { accessLevel: "PUBLIC", needAuth: false },
       recoverPasswordForm
-    )
+    );
     /**
      * This route get the request to send a email
      * with the token for the password reset
      */
     this.post(
       "/recoverPassword/",
-      {accessLevel: "PUBLIC", needAuth: false},
+      { accessLevel: "PUBLIC", needAuth: false },
       requestPasswordReset
-    )
+    );
     /**
      * This route show the new password form
      */
     this.get(
       "/passwordReset/",
-      {accessLevel: "PUBLIC", needAuth: false},
+      { accessLevel: "PUBLIC", needAuth: false },
       passwordResetForm
-    )
+    );
     /**
      * This route reset the password
      */
     this.post(
       "/passwordReset/",
-      {accessLevel: "PUBLIC", needAuth: false},
+      { accessLevel: "PUBLIC", needAuth: false },
       resetPassword
-    )
+    );
 
     /**
      * This route get the form to change the accesslevel
      */
     this.get(
       "/adminpanel/users",
-      {accessLevel: "ADMIN" , needAuth: true, strategy: "jwt"},
+      { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
       adminPanelView
-    )
+    );
 
     /**
      * This route change the user access level
      */
     this.post(
       "/adminpanel/users",
-      {accessLevel: "ADMIN" , needAuth: true, strategy: "jwt"},
+      { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
       userAccessLevel
-    )
-     /**
+    );
+    /**
      * This route change the user access level
-      */
-     this.post(
+     */
+    this.post(
       "/users/:uid/documents",
-      {accessLevel: "PUBLIC" , needAuth: false},
-      uploader.any('file'),
+      { accessLevel: "PUBLIC", needAuth: false },
+      uploader.any("file"),
       userFileUpload
-    )
+    );
+
+    /**
+     * This route get all users
+     */
+    this.get(
+      "/users/",
+      { accessLevel: "PUBLIC", needAuth: false },
+      getAllUsers
+    );
+
+    /**
+     * This route delete a user
+     */
+    this.delete(
+      "/users/",
+      { accessLevel: "PUBLIC", needAuth: false },
+      deleteUsers
+    );
   }
 }
