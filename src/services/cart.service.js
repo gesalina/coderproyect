@@ -121,10 +121,6 @@ export default class Cart {
         });
       }
       cart.products.push({ product: productData._id, quantity: quantity });
-      await productModel.updateOne(
-        { _id: productId },
-        { $inc: { stock: -quantity } }
-      );
       return await cartModel.updateOne({ _id: cartId }, cart);
     } catch (error) {
       console.log(error);
