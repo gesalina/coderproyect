@@ -138,11 +138,17 @@ export const resetPassword = async (request, response) => {
 };
 
 export const adminPanelView = async (request, response) => {
-  response.render("sessions/adminpanel/usersManager", {
-    view_name: "Admin Panel | Manage Users",
-    user: request.user.user,
-    isAuth: true,
-  });
+  try {
+    const getAllUsers = await authRepository.getAllUsers();
+    response.render("sessions/adminpanel/usersManager", {
+      view_name: "Admin Panel | Manage Users",
+      user: request.user.user,
+      isAuth: true,
+      users: getAllUsers,
+    });
+  } catch (error) {
+    return response.sendServerError(error.message);
+  }
 };
 
 export const userAccessLevel = async (request, response) => {
@@ -176,6 +182,16 @@ export const getAllUsers = async (request, response) => {
 export const deleteUsers = async (request, response) => {
   try {
     const result = await authRepository.deleteUsers(request);
+    return response.sendSuccess(result);
+  } catch (error) {
+    return response.sendServerError(error.message);
+  }
+};
+
+
+export const deleteUser = async (request, response) => {
+  try {
+    const result = await authRepository.deleteUser(request);
     return response.sendSuccess(result);
   } catch (error) {
     return response.sendServerError(error.message);

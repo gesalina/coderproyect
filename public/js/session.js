@@ -35,6 +35,7 @@ let resetPassword = document.getElementById("resetPassword");
 let userEmail = document.getElementById("user-email");
 let accessLevel = document.getElementById("access-levels");
 let changeAccessLevel = document.getElementById("changeAccessLevel");
+let deleteUser = document.getElementById("deleteUser");
 /**
  * Logout button, this function redirect after
  */
@@ -224,6 +225,33 @@ changeAccessLevel?.addEventListener("click", async () => {
       return alert(result.error);
     }
     alert("The accesslevel has been change");
+  } catch (error) {
+    alert(error);
+  }
+});
+
+
+deleteUser?.addEventListener("click", async () => {
+
+  const body = {
+    email: userEmail.value
+  };
+
+  console.log(body);
+
+  const response = await fetch("/session/user", {
+    method: "DELETE",
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  try {
+    const result = await response.json();
+    if (response.status == 400) {
+      return alert(result.error);
+    }
+    alert("User has been deleted");
   } catch (error) {
     alert(error);
   }

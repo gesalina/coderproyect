@@ -319,6 +319,16 @@ export default class Auth {
     }
   };
 
+  deleteUser = async (request) => {
+    try {
+      let { email } = request.body;
+      const deleteUser = await UserModel.findOneAndDelete({ email: email });
+      return deleteUser;
+    } catch (error) {
+      return error;
+    }
+  };
+
   deleteUsers = async (request) => {
     try {
       const last_connection = new Date();

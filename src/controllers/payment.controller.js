@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import { cartRepository } from "../repositories/repository.js";
 
-const stripe = new Stripe("sk_test_51O7LZIIR1vqRXT5fShjlSYZQQs4ktR6Sgcq6jeetkkBot11H9F9CPgKrIhLreXbJioCcQ9qweKSA2nS6qYLAczMX00XOcfPgKT");
+const stripe = new Stripe(process.env.STRIPE_API_KEY);
 
 export const paymentController = async (request, response) => {
   try {

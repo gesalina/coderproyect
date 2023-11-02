@@ -82,4 +82,9 @@ export default class AuthRepository {
     const result = await this.dao.deleteUsers(request);
     return result;
   };
+
+  deleteUser = async (request) => {
+    const result = await this.dao.deleteUser(request);
+    return result;
+  };
 }

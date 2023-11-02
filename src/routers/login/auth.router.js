@@ -22,6 +22,7 @@ import {
   userFileUpload,
   getAllUsers,
   deleteUsers,
+  deleteUser,
 } from "../../controllers/session.controller.js";
 export default class AuthRouter extends routerHandler {
   init() {
@@ -120,7 +121,11 @@ export default class AuthRouter extends routerHandler {
      */
     this.get(
       "/profile",
-      { accessLevel: ["USER", "ADMIN"], needAuth: true, strategy: "current" },
+      {
+        accessLevel: ["USER", "PREMIUM", "ADMIN"],
+        needAuth: true,
+        strategy: "current",
+      },
       userDataController
     );
 
@@ -129,7 +134,11 @@ export default class AuthRouter extends routerHandler {
      */
     this.get(
       "/profile/changePassword",
-      { accessLevel: ["USER", "ADMIN"], needAuth: true, strategy: "jwt" },
+      {
+        accessLevel: ["USER", "PREMIUM", "ADMIN"],
+        needAuth: true,
+        strategy: "jwt",
+      },
       userChangePasswordForm
     );
     /**
@@ -137,7 +146,11 @@ export default class AuthRouter extends routerHandler {
      */
     this.post(
       "/profile/changePassword",
-      { accessLevel: ["USER", "ADMIN"], needAuth: true, strategy: "jwt" },
+      {
+        accessLevel: ["USER", "PREMIUM", "ADMIN"],
+        needAuth: true,
+        strategy: "jwt",
+      },
       userChangePassword
     );
     /**
@@ -145,7 +158,7 @@ export default class AuthRouter extends routerHandler {
      */
     this.get(
       "/recoverPassword/",
-      { accessLevel: "PUBLIC", needAuth: false },
+      { accessLevel: ["USER", "PREMIUM", "ADMIN"], needAuth: false },
       recoverPasswordForm
     );
     /**
@@ -196,7 +209,11 @@ export default class AuthRouter extends routerHandler {
      */
     this.post(
       "/users/:uid/documents",
-      { accessLevel: "PUBLIC", needAuth: false },
+      {
+        accessLevel: ["USER", "PREMIUM", "ADMIN"],
+        needAuth: true,
+        strategy: "jwt",
+      },
       uploader.any("file"),
       userFileUpload
     );
@@ -206,17 +223,26 @@ export default class AuthRouter extends routerHandler {
      */
     this.get(
       "/users/",
-      { accessLevel: "PUBLIC", needAuth: false },
+      { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
       getAllUsers
+    );
+
+    /**
+     * This route delete users less than 2 days
+     */
+    this.delete(
+      "/users/",
+      { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
+      deleteUsers
     );
 
     /**
      * This route delete a user
      */
     this.delete(
-      "/users/",
-      { accessLevel: "PUBLIC", needAuth: false },
-      deleteUsers
+      "/user/",
+      { accessLevel: "ADMIN", needAuth: true, strategy: "jwt" },
+      deleteUser
     );
   }
 }
