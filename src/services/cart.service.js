@@ -142,10 +142,6 @@ export default class Cart {
           error: "The quantity is greater than the available stock",
         });
       }
-      await productModel.updateOne(
-        { _id: productId },
-        { $inc: { stock: -quantity } }
-      );
       return cartModel.updateOne(
         { _id: cartId, "products.product": productData._id },
         { $inc: { "products.$.quantity": quantity } }
