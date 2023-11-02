@@ -158,7 +158,7 @@ export default class AuthRouter extends routerHandler {
      */
     this.get(
       "/recoverPassword/",
-      { accessLevel: ["USER", "PREMIUM", "ADMIN"], needAuth: false },
+      { accessLevel: "PUBLIC", needAuth: false },
       recoverPasswordForm
     );
     /**
