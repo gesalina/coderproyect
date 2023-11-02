@@ -32,7 +32,7 @@ export default class AuthRepository {
 
   jwtAuth = async (jwt_payload, done) => {
     const result = await this.dao.jwtAuth(jwt_payload, done);
-    return;
+    return result;
   };
 
   getUser = async (jwt_payload, done) => {

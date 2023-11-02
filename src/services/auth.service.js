@@ -70,6 +70,8 @@ export default class Auth {
       const userEmail = profile._json.email;
       const userExists = await UserModel.findOne({ email: userEmail });
       if (userExists) {
+        const token = generateToken(userExists);
+        userExists.token = token;
         return done(null, userExists);
       }
       const newUser = {
