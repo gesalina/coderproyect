@@ -80,7 +80,11 @@ export default class Auth {
         password: "",
       };
 
-      const result = await UserModel.create(newUser);
+      const result = await UserModel.create(newUser, { new: true });
+
+      const token = generateToken(result);
+      result.token = token;
+
       return done(null, result);
     } catch (error) {
       return done(error);
