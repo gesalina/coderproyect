@@ -1,5 +1,6 @@
 import { productModel } from "../dao/models/product.model.js";
 import userModel from "../dao/models/user.model.js";
+import { sendEmail } from "../helpers/auth.helper.js";
 
 export default class Product {
   constructor() {
@@ -113,6 +114,11 @@ export default class Product {
         const result = await productModel.findOneAndDelete({
           _id: id,
         });
+        sendEmail(
+          product.owner,
+          "Your product has been delete",
+          `Hi ${product.owner} your product has been deleted`
+        );
         return result;
       } else {
         return (this.error = {
