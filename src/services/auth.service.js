@@ -75,19 +75,17 @@ export default class Auth {
         return done(null, userExists);
       }
       const newUser = {
-        first_name: username,
+        first_name: `${username}`,
         last_name: "",
-        email: userEmail,
+        email: `${userEmail}`,
         age: "",
         password: "",
       };
 
-      const result = await UserModel.create(newUser, { new: true });
-
-      const token = generateToken(result);
-      result.token = token;
-
-      return done(null, result);
+      const createUser = await UserModel.create(newUser);
+      const token = generateToken(createUser);
+      createUser.token = token;
+      return done(null, createUser);
     } catch (error) {
       return done(error);
     }

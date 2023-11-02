@@ -58,7 +58,9 @@ export const logoutController = async (request, response) => {
 };
 
 export const gitHubController = async (request, response) => {
-  response.redirect("/products");
+  response
+    .cookie(process.env.JWT_COOKIE_NAME, request.user.token)
+    .redirect("/products");
 };
 
 export const userDataController = async (request, response) => {
@@ -187,7 +189,6 @@ export const deleteUsers = async (request, response) => {
     return response.sendServerError(error.message);
   }
 };
-
 
 export const deleteUser = async (request, response) => {
   try {
