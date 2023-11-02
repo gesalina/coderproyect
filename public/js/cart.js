@@ -8,11 +8,11 @@ const finishPurchase = document.getElementById("finishPurchase");
 
 
 finishPurchase?.addEventListener('click',function(){
-  window.location.href = `http://localhost:8080/api/payment/createCheckout/${getActiveCart}`;
+  window.location.href = `https://coderproyect-production.up.railway.app/api/payment/createCheckout/${getActiveCart}`;
 })
 
 purchase?.addEventListener('click', function(){
-  window.location.href = `http://localhost:8080/api/carts/${getActiveCart}/cart`;
+  window.location.href = `https://coderproyect-production.up.railway.app/api/carts/${getActiveCart}/cart`;
 })
 
 getCartValue.textContent = productAmmount;

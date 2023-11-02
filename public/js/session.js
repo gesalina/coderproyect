@@ -111,7 +111,7 @@ loginBtn?.addEventListener("click", async () => {
 });
 
 githubLogin?.addEventListener("click", () => {
-  window.location.href = "http://localhost:8080/session/github";
+  window.location.href = "https://coderproyect-production.up.railway.app/session/github";
 });
 
 resetPasswordButton?.addEventListener("click", async () => {

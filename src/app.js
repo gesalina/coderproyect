@@ -104,7 +104,7 @@ try {
     `mongodb+srv://${process.env.USER}:${process.env.KEY}@${process.env.MONGO_DATABASE_URL}`
   );
   const serverHttp = app.listen(process.env.PORT, () =>
-    console.log(`Server is running at: http://localhost:8080`)
+    console.log(`Server is running at: https://coderproyect-production.up.railway.app/`)
   );
 
   const io = new Server(serverHttp);

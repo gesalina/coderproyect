@@ -134,12 +134,12 @@ export default class Auth {
         createdAt: Date.now(),
       });
 
-      const link = `localhost:8080/session/passwordReset?token=${resetToken}&id=${user._id}`;
+      const link = `https://coderproyect-production.up.railway.app/session/passwordReset?token=${resetToken}&id=${user._id}`;
       const message = `
       <div>
       <h2>Hi ${user.first_name}</h2>
       <p>You has been request a password reset, please follow this link to reset your passowrd</p>
-      <a href="http://${link}">Reset password</a>
+      <a href="${link}">Reset password</a>
       </div>
       `;
       sendEmail(user.email, "Password Reset Request", message);
@@ -296,7 +296,7 @@ export default class Auth {
             $push: {
               documents: {
                 name: file.filename,
-                reference: `http://localhost:8080/public/img/${request.body.customPath}`,
+                reference: `https://coderproyect-production.up.railway.app/public/img/${request.body.customPath}`,
               },
             },
           }
