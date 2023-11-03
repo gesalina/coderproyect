@@ -72,6 +72,11 @@ export default class Auth {
       if (userExists) {
         const token = generateToken(userExists);
         userExists.token = token;
+        await UserModel.findOneAndUpdate(
+        { email: userEmail },
+        { $set: { last_connection: Date.now() } },
+        { new: true }
+      );
         return done(null, userExists);
       }
       const newUser = {
@@ -82,6 +87,11 @@ export default class Auth {
         password: "",
       };
 
+      await UserModel.findOneAndUpdate(
+        { email: userEmail },
+        { $set: { last_connection: Date.now() } },
+        { new: true }
+      );
       const createUser = await UserModel.create(newUser);
       const token = generateToken(createUser);
       createUser.token = token;
